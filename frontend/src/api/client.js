@@ -1,6 +1,12 @@
 import axios from "axios";
 
-const api = axios.create({ baseURL: "/api" });
+// In Docker (nginx reverse-proxies /api) this stays relative. On Vercel
+// there's no reverse proxy, so set VITE_API_URL in the Vercel project's
+// environment variables to the backend's public HTTPS URL, e.g.
+// https://dashboard-api.swag.sa/api
+const baseURL = import.meta.env.VITE_API_URL || "/api";
+
+const api = axios.create({ baseURL });
 
 export async function getSystems() {
   const { data } = await api.get("/systems");
