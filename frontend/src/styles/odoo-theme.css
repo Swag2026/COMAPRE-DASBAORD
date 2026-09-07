@@ -1,0 +1,52 @@
+:root {
+  /* Odoo's actual brand colors */
+  --odoo-purple: #714B67;
+  --odoo-purple-dark: #4B2C43;
+  --odoo-purple-light: #875A7B;
+  --odoo-purple-pale: #F0EBEE;
+
+  --odoo-bg: #F4F5FA;
+  --odoo-surface: #FFFFFF;
+  --odoo-border: #E2E4E9;
+  --odoo-border-strong: #D0D3DA;
+
+  --odoo-text: #2C2C2C;
+  --odoo-text-muted: #6B6E77;
+  --odoo-text-faint: #9A9DA6;
+
+  --odoo-success: #28A745;
+  --odoo-warning: #E0A339;
+  --odoo-danger: #DC3545;
+  --odoo-info: #17A2B8;
+
+  --odoo-radius: 6px;
+  --odoo-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --odoo-topbar-h: 46px;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--odoo-bg);
+  color: var(--odoo-text);
+  font-size: 13px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+a { color: var(--odoo-purple); text-decoration: none; }
+a:hover { text-decoration: underline; }
