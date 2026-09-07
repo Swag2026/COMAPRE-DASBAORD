@@ -3,14 +3,20 @@ import api from "../api/client";
 
 const AuthContext = createContext(null);
 
+// Registered once, outside React's effect timing entirely — reads the
+// token straight from localStorage at the moment each request actually
+// goes out. This fixes a race where the very first request right after
+// login (the redirect to /total-stock) could fire before a token-driven
+// useEffect had set the header, causing a spurious 401.
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("swag_token");
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem("swag_token"));
   const [username, setUsername] = useState(() => localStorage.getItem("swag_username"));
-
-  useEffect(() => {
-    if (token) api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    else delete api.defaults.headers.common["Authorization"];
-  }, [token]);
 
   // If any request comes back 401, force logout so the user re-enters
   // their password instead of staring at broken pages.
