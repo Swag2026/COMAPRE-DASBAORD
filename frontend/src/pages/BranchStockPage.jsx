@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { getBranchStock } from "../api/client";
+import { getBranchStock, exportBranchCsv, exportBranchXlsx, exportBranchMatrix } from "../api/client";
+import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
+import ExportButtons from "../components/ExportButtons";
+import BranchQtyChart from "../components/BranchQtyChart";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 import { SectionTag } from "./TotalStockPage";
 
@@ -14,6 +17,7 @@ const columns = [
 ];
 
 export default function BranchStockPage() {
+  const { reloadKey, lowStockThreshold } = useAppState();
   const [allRows, setAllRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -30,7 +34,7 @@ export default function BranchStockPage() {
       })
       .catch(() => setAllRows([]))
       .finally(() => setLoading(false));
-  }, []);
+  }, [reloadKey]);
 
   const allSystems = useMemo(
     () => [...new Set(allRows.map((r) => r.system_name))].sort(),
@@ -71,7 +75,7 @@ export default function BranchStockPage() {
             selected={selSystems}
             onChange={(v) => {
               setSelSystems(v);
-              setSelBranches([]); // reset branch filter when company changes
+              setSelBranches([]);
             }}
           />
         </FilterField>
@@ -102,10 +106,31 @@ export default function BranchStockPage() {
         </FilterField>
       </FilterBar>
 
-      <DataTable columns={columns} rows={filtered} loading={loading} />
+      <div
+        style={{
+          background: "var(--odoo-surface)",
+          border: "1px solid var(--odoo-border)",
+          borderRadius: "var(--odoo-radius)",
+          padding: 14,
+          marginBottom: 14,
+        }}
+      >
+        <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Qty by Branch</div>
+        <BranchQtyChart rows={filtered} />
+      </div>
+
+      <DataTable columns={columns} rows={filtered} loading={loading} lowStockThreshold={lowStockThreshold} />
       <div style={{ marginTop: 10, fontSize: 12, color: "var(--odoo-text-muted)" }}>
         Showing {filtered.length.toLocaleString()} / {allRows.length.toLocaleString()} rows
       </div>
+
+      <ExportButtons
+        exporters={[
+          { key: "csv", label: "CSV ↓", filename: "branch_stock.csv", fn: () => exportBranchCsv(search) },
+          { key: "xlsx", label: "Excel ↓", filename: "branch_stock.xlsx", fn: () => exportBranchXlsx(search) },
+          { key: "matrix", label: "Matrix ↓", filename: "branch_matrix.xlsx", fn: () => exportBranchMatrix(search) },
+        ]}
+      />
     </div>
   );
 }

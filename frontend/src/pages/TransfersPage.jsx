@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { getTransfers } from "../api/client";
+import { getTransfers, exportTransfersCsv, exportTransfersXlsx } from "../api/client";
+import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
 import KpiRow from "../components/KpiRow";
+import ExportButtons from "../components/ExportButtons";
 import { SectionTag } from "./TotalStockPage";
 
 const columns = [
@@ -17,6 +19,7 @@ const columns = [
 ];
 
 export default function TransfersPage() {
+  const { reloadKey } = useAppState();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +29,7 @@ export default function TransfersPage() {
       .then((d) => setRows(d.rows))
       .catch(() => setRows([]))
       .finally(() => setLoading(false));
-  }, []);
+  }, [reloadKey]);
 
   const ok = useMemo(() => rows.filter((r) => r.status === "OK"), [rows]);
   const totalQty = ok.reduce((sum, r) => sum + (r.qty || 0), 0);
@@ -50,6 +53,13 @@ export default function TransfersPage() {
       <div style={{ marginTop: 10, fontSize: 12, color: "var(--odoo-text-muted)" }}>
         {ok.length.toLocaleString()} rows
       </div>
+
+      <ExportButtons
+        exporters={[
+          { key: "csv", label: "CSV ↓", filename: "transfers.csv", fn: () => exportTransfersCsv() },
+          { key: "xlsx", label: "Excel ↓", filename: "transfers.xlsx", fn: () => exportTransfersXlsx() },
+        ]}
+      />
     </div>
   );
 }

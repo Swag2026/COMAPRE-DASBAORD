@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { getReorder } from "../api/client";
+import { getReorder, exportReorderCsv, exportReorderXlsx } from "../api/client";
+import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
 import KpiRow from "../components/KpiRow";
+import ExportButtons from "../components/ExportButtons";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 import { SectionTag } from "./TotalStockPage";
 
@@ -37,6 +39,7 @@ const columns = [
 ];
 
 export default function ReorderPage() {
+  const { reloadKey } = useAppState();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [targetDays, setTargetDays] = useState(30);
@@ -49,7 +52,7 @@ export default function ReorderPage() {
       .then((d) => setRows(d.rows))
       .catch(() => setRows([]))
       .finally(() => setLoading(false));
-  }, [targetDays, reorderPoint]);
+  }, [targetDays, reorderPoint, reloadKey]);
 
   const ok = useMemo(() => rows.filter((r) => r.status === "OK"), [rows]);
   const critical = ok.filter((r) => r.priority === "Critical").length;
@@ -119,6 +122,19 @@ export default function ReorderPage() {
       <div style={{ marginTop: 10, fontSize: 12, color: "var(--odoo-text-muted)" }}>
         {shown.length.toLocaleString()} rows
       </div>
+
+      <ExportButtons
+        exporters={[
+          {
+            key: "csv", label: "CSV ↓", filename: "reorder.csv",
+            fn: () => exportReorderCsv({ target_days: targetDays, reorder_point: reorderPoint }),
+          },
+          {
+            key: "xlsx", label: "Excel ↓", filename: "reorder.xlsx",
+            fn: () => exportReorderXlsx({ target_days: targetDays, reorder_point: reorderPoint }),
+          },
+        ]}
+      />
     </div>
   );
 }

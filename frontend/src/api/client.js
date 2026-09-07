@@ -29,4 +29,41 @@ export async function getTransfers() {
   return data;
 }
 
+export function exportTotalCsv(codes = "") {
+  return api.get("/export/total-stock.csv", { params: { codes }, responseType: "blob" });
+}
+export function exportTotalXlsx(codes = "") {
+  return api.get("/export/total-stock.xlsx", { params: { codes }, responseType: "blob" });
+}
+export function exportBranchCsv(codes = "") {
+  return api.get("/export/branch-stock.csv", { params: { codes }, responseType: "blob" });
+}
+export function exportBranchXlsx(codes = "") {
+  return api.get("/export/branch-stock.xlsx", { params: { codes }, responseType: "blob" });
+}
+export function exportBranchMatrix(codes = "") {
+  return api.get("/export/branch-matrix.xlsx", { params: { codes }, responseType: "blob" });
+}
+export function exportReorderCsv(params = {}) {
+  return api.get("/export/reorder.csv", { params, responseType: "blob" });
+}
+export function exportReorderXlsx(params = {}) {
+  return api.get("/export/reorder.xlsx", { params, responseType: "blob" });
+}
+export function exportTransfersCsv() {
+  return api.get("/export/transfers.csv", { responseType: "blob" });
+}
+export function exportTransfersXlsx() {
+  return api.get("/export/transfers.xlsx", { responseType: "blob" });
+}
+
+export async function extractCodes(file) {
+  const form = new FormData();
+  form.append("file", file);
+  const { data } = await api.post("/extract-codes", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+}
+
 export default api;

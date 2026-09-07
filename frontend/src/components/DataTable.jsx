@@ -1,4 +1,4 @@
-export default function DataTable({ columns, rows, loading, emptyText = "No data for selected filters." }) {
+export default function DataTable({ columns, rows, loading, emptyText = "No data for selected filters.", lowStockThreshold = 0 }) {
   if (loading) {
     return (
       <div style={{ padding: 40, textAlign: "center", color: "var(--odoo-text-muted)" }}>
@@ -72,7 +72,7 @@ export default function DataTable({ columns, rows, loading, emptyText = "No data
                   style={{
                     padding: "8px 12px",
                     textAlign: c.align === "right" ? "right" : "left",
-                    color: c.key === "on_hand" && row[c.key] === 0
+                    color: c.key === "on_hand" && row[c.key] <= lowStockThreshold
                       ? "var(--odoo-danger)"
                       : "var(--odoo-text)",
                     fontWeight: c.key === "on_hand" ? 600 : 400,
