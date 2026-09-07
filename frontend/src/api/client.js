@@ -72,4 +72,9 @@ export async function extractCodes(file) {
   return data;
 }
 
+export async function clearServerCache() {
+  const { data } = await api.post("/cache/clear");
+  return data;
+}
+
 export default api;

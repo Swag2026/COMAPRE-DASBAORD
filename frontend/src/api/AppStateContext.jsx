@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import { clearServerCache } from "./client";
 
 const AppStateContext = createContext(null);
 
@@ -6,7 +7,14 @@ export function AppStateProvider({ children }) {
   const [reloadKey, setReloadKey] = useState(0);
   const [lowStockThreshold, setLowStockThreshold] = useState(5);
 
-  const triggerReload = () => setReloadKey((k) => k + 1);
+  const triggerReload = async () => {
+    try {
+      await clearServerCache();
+    } catch {
+      // even if the cache-clear call fails, still trigger a refetch
+    }
+    setReloadKey((k) => k + 1);
+  };
 
   return (
     <AppStateContext.Provider

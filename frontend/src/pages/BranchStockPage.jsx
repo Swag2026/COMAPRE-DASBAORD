@@ -3,9 +3,12 @@ import { getBranchStock, exportBranchCsv, exportBranchXlsx, exportBranchMatrix }
 import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
 import ExportButtons from "../components/ExportButtons";
+import KpiRow from "../components/KpiRow";
 import BranchQtyChart from "../components/BranchQtyChart";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 import { SectionTag } from "./TotalStockPage";
+
+const ROW_CAP = 200; // same cap the original Streamlit table used — keeps the table snappy
 
 const columns = [
   { key: "system_name", label: "System" },
@@ -24,6 +27,7 @@ export default function BranchStockPage() {
   const [selSystems, setSelSystems] = useState([]);
   const [selBranches, setSelBranches] = useState([]);
   const [minQty, setMinQty] = useState(0);
+  const [qtyRange, setQtyRange] = useState(null); // [min, max] or null = no range filter applied yet
 
   useEffect(() => {
     setLoading(true);
@@ -31,6 +35,7 @@ export default function BranchStockPage() {
       .then((d) => {
         setAllRows(d.rows);
         setSelSystems([...new Set(d.rows.map((r) => r.system_name))]);
+        setQtyRange(null);
       })
       .catch(() => setAllRows([]))
       .finally(() => setLoading(false));
@@ -48,7 +53,9 @@ export default function BranchStockPage() {
     [allRows, selSystems]
   );
 
-  const filtered = useMemo(() => {
+  // Filters applied before the qty-range slider bounds are computed
+  // (Company / Branch / Min Qty / search) — mirrors the original's two-stage filtering.
+  const preRange = useMemo(() => {
     let rows = allRows.filter((r) => selSystems.includes(r.system_name));
     if (selBranches.length) rows = rows.filter((r) => selBranches.includes(r.branch));
     if (minQty > 0) rows = rows.filter((r) => r.on_hand >= minQty);
@@ -64,6 +71,24 @@ export default function BranchStockPage() {
     return rows;
   }, [allRows, selSystems, selBranches, minQty, search]);
 
+  const qtyBounds = useMemo(() => {
+    if (preRange.length === 0) return [0, 0];
+    const vals = preRange.map((r) => r.on_hand);
+    return [Math.min(...vals), Math.max(...vals)];
+  }, [preRange]);
+
+  const filtered = useMemo(() => {
+    if (!qtyRange) return preRange;
+    const [lo, hi] = qtyRange;
+    return preRange.filter((r) => r.on_hand >= lo && r.on_hand <= hi);
+  }, [preRange, qtyRange]);
+
+  const displayRows = filtered.slice(0, ROW_CAP);
+
+  const branchesSelectedCount = selBranches.length;
+  const totalUnits = filtered.reduce((sum, r) => sum + r.on_hand, 0);
+  const modelsCount = new Set(filtered.map((r) => r.model_code)).size;
+
   return (
     <div style={{ padding: "18px 24px" }}>
       <SectionTag>Branch-wise Stock</SectionTag>
@@ -76,6 +101,7 @@ export default function BranchStockPage() {
             onChange={(v) => {
               setSelSystems(v);
               setSelBranches([]);
+              setQtyRange(null);
             }}
           />
         </FilterField>
@@ -83,7 +109,10 @@ export default function BranchStockPage() {
           <MultiPicker
             options={branchOptions}
             selected={selBranches}
-            onChange={setSelBranches}
+            onChange={(v) => {
+              setSelBranches(v);
+              setQtyRange(null);
+            }}
             placeholder="Leave empty = All"
           />
         </FilterField>
@@ -93,7 +122,10 @@ export default function BranchStockPage() {
             min={0}
             style={inputStyle}
             value={minQty}
-            onChange={(e) => setMinQty(Number(e.target.value) || 0)}
+            onChange={(e) => {
+              setMinQty(Number(e.target.value) || 0);
+              setQtyRange(null);
+            }}
           />
         </FilterField>
         <FilterField label="Search Model / Product" width={280}>
@@ -101,27 +133,56 @@ export default function BranchStockPage() {
             style={inputStyle}
             placeholder="e.g. RVT196"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setQtyRange(null);
+            }}
           />
         </FilterField>
       </FilterBar>
 
-      <div
-        style={{
-          background: "var(--odoo-surface)",
-          border: "1px solid var(--odoo-border)",
-          borderRadius: "var(--odoo-radius)",
-          padding: 14,
-          marginBottom: 14,
-        }}
-      >
-        <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Qty by Branch</div>
-        <BranchQtyChart rows={filtered} />
-      </div>
+      {qtyBounds[1] > qtyBounds[0] && (
+        <FilterBar>
+          <FilterField label="Qty Range — min" width={140}>
+            <input
+              type="number"
+              style={inputStyle}
+              min={qtyBounds[0]}
+              max={qtyBounds[1]}
+              value={qtyRange ? qtyRange[0] : qtyBounds[0]}
+              onChange={(e) =>
+                setQtyRange([Number(e.target.value) || 0, qtyRange ? qtyRange[1] : qtyBounds[1]])
+              }
+            />
+          </FilterField>
+          <FilterField label="Qty Range — max" width={140}>
+            <input
+              type="number"
+              style={inputStyle}
+              min={qtyBounds[0]}
+              max={qtyBounds[1]}
+              value={qtyRange ? qtyRange[1] : qtyBounds[1]}
+              onChange={(e) =>
+                setQtyRange([qtyRange ? qtyRange[0] : qtyBounds[0], Number(e.target.value) || 0])
+              }
+            />
+          </FilterField>
+        </FilterBar>
+      )}
 
-      <DataTable columns={columns} rows={filtered} loading={loading} lowStockThreshold={lowStockThreshold} />
+      {branchesSelectedCount > 0 && filtered.length > 0 && (
+        <KpiRow
+          items={[
+            { label: "Branches", value: branchesSelectedCount },
+            { label: "Total Units", value: totalUnits.toLocaleString() },
+            { label: "Models", value: modelsCount.toLocaleString() },
+          ]}
+        />
+      )}
+
+      <DataTable columns={columns} rows={displayRows} loading={loading} lowStockThreshold={lowStockThreshold} />
       <div style={{ marginTop: 10, fontSize: 12, color: "var(--odoo-text-muted)" }}>
-        Showing {filtered.length.toLocaleString()} / {allRows.length.toLocaleString()} rows
+        Showing {Math.min(filtered.length, ROW_CAP).toLocaleString()} / {filtered.length.toLocaleString()} rows
       </div>
 
       <ExportButtons
@@ -131,6 +192,19 @@ export default function BranchStockPage() {
           { key: "matrix", label: "Matrix ↓", filename: "branch_matrix.xlsx", fn: () => exportBranchMatrix(search) },
         ]}
       />
+
+      <div
+        style={{
+          background: "var(--odoo-surface)",
+          border: "1px solid var(--odoo-border)",
+          borderRadius: "var(--odoo-radius)",
+          padding: 14,
+          marginTop: 14,
+        }}
+      >
+        <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Qty by Branch</div>
+        <BranchQtyChart rows={preRange} />
+      </div>
     </div>
   );
 }
