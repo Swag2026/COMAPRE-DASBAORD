@@ -10,7 +10,7 @@ import {
 } from "recharts";
 
 const SYSTEM_COLORS = {
-  SWAG: "#714B67",
+  SWAG: "#1A7A82",
   "La Rouche": "#D4A84B",
   "Different Clothes": "#059669",
   "Fashion Limits": "#7C3AED",

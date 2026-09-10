@@ -14,7 +14,7 @@ export default function DataTable({ columns, rows, loading, emptyText = "No data
           textAlign: "center",
           color: "var(--odoo-text-muted)",
           background: "var(--odoo-surface)",
-          border: "1px solid var(--odoo-border)",
+          border: "2px solid var(--odoo-border)",
           borderRadius: "var(--odoo-radius)",
         }}
       >
@@ -24,9 +24,10 @@ export default function DataTable({ columns, rows, loading, emptyText = "No data
   }
   return (
     <div
+      className="swag-table-wrap"
       style={{
         background: "var(--odoo-surface)",
-        border: "1px solid var(--odoo-border)",
+        border: "2px solid var(--odoo-border)",
         borderRadius: "var(--odoo-radius)",
         overflow: "auto",
         maxHeight: 560,
@@ -44,10 +45,10 @@ export default function DataTable({ columns, rows, loading, emptyText = "No data
                   background: "var(--odoo-purple)",
                   color: "#fff",
                   textAlign: c.align === "right" ? "right" : "left",
-                  padding: "9px 12px",
-                  fontSize: 11.5,
-                  fontWeight: 600,
-                  letterSpacing: 0.3,
+                  padding: "12px 14px",
+                  fontSize: 10.5,
+                  fontWeight: 700,
+                  letterSpacing: 1.5,
                   textTransform: "uppercase",
                   whiteSpace: "nowrap",
                 }}
@@ -58,34 +59,53 @@ export default function DataTable({ columns, rows, loading, emptyText = "No data
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, i) => (
-            <tr
-              key={i}
-              style={{
-                background: i % 2 === 0 ? "var(--odoo-surface)" : "#FAFAFC",
-                borderBottom: "1px solid var(--odoo-border)",
-              }}
-            >
-              {columns.map((c) => (
-                <td
-                  key={c.key}
-                  style={{
-                    padding: "8px 12px",
-                    textAlign: c.align === "right" ? "right" : "left",
-                    color: c.key === "on_hand" && row[c.key] <= lowStockThreshold
-                      ? "var(--odoo-danger)"
-                      : "var(--odoo-text)",
-                    fontWeight: c.key === "on_hand" ? 600 : 400,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {c.render ? c.render(row) : row[c.key]}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {rows.map((row, i) => {
+            const qty = row.on_hand;
+            const isZero = qty === 0;
+            const isLow = qty > 0 && qty <= lowStockThreshold;
+            const rowBg = isLow ? "#FFFBEB" : i % 2 === 0 ? "var(--odoo-surface)" : "#F9FAFB";
+            return (
+              <tr
+                key={i}
+                className="swag-row"
+                style={{
+                  background: rowBg,
+                  borderBottom: "1px solid #F3F4F6",
+                  animation: "fadeRow 0.25s ease both",
+                  animationDelay: `${Math.min(i, 30) * 0.01}s`,
+                }}
+              >
+                {columns.map((c) => {
+                  const isQtyCol = c.key === "on_hand" || c.key === "qty";
+                  return (
+                    <td
+                      key={c.key}
+                      style={{
+                        padding: "9px 14px",
+                        textAlign: c.align === "right" ? "right" : "left",
+                        color: isLow
+                          ? "#92400E"
+                          : isQtyCol && isZero
+                          ? "var(--odoo-danger)"
+                          : "var(--odoo-text)",
+                        fontWeight: isQtyCol ? 700 : 500,
+                        fontSize: 13,
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {c.render ? c.render(row) : row[c.key]}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
+      <style>{`
+        .swag-table-wrap table { border-collapse: collapse; width: 100%; }
+        .swag-row:hover td { background: #EEF9FA !important; }
+      `}</style>
     </div>
   );
 }

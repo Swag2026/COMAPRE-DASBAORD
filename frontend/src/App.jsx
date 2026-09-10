@@ -5,8 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TopBar from "./components/TopBar";
 import Sidebar from "./components/Sidebar";
 import LoginPage from "./pages/LoginPage";
-import TotalStockPage from "./pages/TotalStockPage";
-import BranchStockPage from "./pages/BranchStockPage";
+import ProductComparisonPage from "./pages/ProductComparisonPage";
 import ReorderPage from "./pages/ReorderPage";
 import TransfersPage from "./pages/TransfersPage";
 import ComingSoonPage from "./pages/ComingSoonPage";
@@ -29,25 +28,18 @@ function AppRoutes() {
     <Routes>
       <Route
         path="/login"
-        element={isAuthenticated ? <Navigate to="/total-stock" replace /> : <LoginPage />}
+        element={isAuthenticated ? <Navigate to="/product-comparison" replace /> : <LoginPage />}
       />
-      <Route path="/" element={<Navigate to="/total-stock" replace />} />
+      <Route path="/" element={<Navigate to="/product-comparison" replace />} />
+      {/* Old links to /total-stock or /branch-stock still work, redirected here */}
+      <Route path="/total-stock" element={<Navigate to="/product-comparison" replace />} />
+      <Route path="/branch-stock" element={<Navigate to="/product-comparison" replace />} />
       <Route
-        path="/total-stock"
+        path="/product-comparison"
         element={
           <ProtectedRoute>
             <DashboardLayout>
-              <TotalStockPage />
-            </DashboardLayout>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/branch-stock"
-        element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <BranchStockPage />
+              <ProductComparisonPage />
             </DashboardLayout>
           </ProtectedRoute>
         }

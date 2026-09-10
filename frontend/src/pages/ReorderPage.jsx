@@ -4,6 +4,7 @@ import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
 import KpiRow from "../components/KpiRow";
 import ExportButtons from "../components/ExportButtons";
+import HeroHeader from "../components/HeroHeader";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 import { SectionTag } from "./TotalStockPage";
 
@@ -64,7 +65,7 @@ export default function ReorderPage() {
 
   return (
     <div style={{ padding: "18px 24px" }}>
-      <SectionTag>Reorder Suggestions</SectionTag>
+      <HeroHeader title="Reorder Suggestions" subtitle="SWAG Dashboard · Live Odoo Data" />
 
       <FilterBar>
         <FilterField label="Target Days" width={120}>

@@ -5,6 +5,7 @@ import DataTable from "../components/DataTable";
 import ExportButtons from "../components/ExportButtons";
 import KpiRow from "../components/KpiRow";
 import BranchQtyChart from "../components/BranchQtyChart";
+import HeroHeader from "../components/HeroHeader";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 import { SectionTag } from "./TotalStockPage";
 
@@ -20,7 +21,7 @@ const columns = [
 ];
 
 export default function BranchStockPage() {
-  const { reloadKey, lowStockThreshold } = useAppState();
+  const { reloadKey, lowStockThreshold, exactMatch, setLastRun } = useAppState();
   const [allRows, setAllRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -31,15 +32,16 @@ export default function BranchStockPage() {
 
   useEffect(() => {
     setLoading(true);
-    getBranchStock({})
+    getBranchStock({ exact: exactMatch })
       .then((d) => {
         setAllRows(d.rows);
         setSelSystems([...new Set(d.rows.map((r) => r.system_name))]);
         setQtyRange(null);
+        setLastRun(new Date().toLocaleTimeString());
       })
       .catch(() => setAllRows([]))
       .finally(() => setLoading(false));
-  }, [reloadKey]);
+  }, [reloadKey, exactMatch, setLastRun]);
 
   const allSystems = useMemo(
     () => [...new Set(allRows.map((r) => r.system_name))].sort(),
@@ -91,7 +93,7 @@ export default function BranchStockPage() {
 
   return (
     <div style={{ padding: "18px 24px" }}>
-      <SectionTag>Branch-wise Stock</SectionTag>
+      <HeroHeader title="Branch-wise Stock" subtitle="SWAG Dashboard · Live Odoo Data" />
 
       <FilterBar>
         <FilterField label="Company" width={240}>

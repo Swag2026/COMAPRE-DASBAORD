@@ -4,36 +4,43 @@ export default function KpiRow({ items }) {
       style={{
         display: "grid",
         gridTemplateColumns: `repeat(${items.length}, 1fr)`,
-        gap: 12,
-        marginBottom: 14,
+        gap: 14,
+        marginBottom: 16,
       }}
     >
-      {items.map((it) => (
+      {items.map((it, i) => (
         <div
           key={it.label}
+          className="kpi-card"
           style={{
             background: "var(--odoo-surface)",
-            border: "1px solid var(--odoo-border)",
-            borderRadius: "var(--odoo-radius)",
-            padding: "14px 16px",
+            border: "2px solid var(--odoo-border)",
+            borderRadius: 14,
+            padding: "20px 22px",
+            textAlign: "center",
+            animation: `countUp 0.5s ease both`,
+            animationDelay: `${i * 0.08}s`,
+            transition: "all 0.2s",
+            cursor: "default",
           }}
         >
           <div
             style={{
-              fontSize: 10.5,
-              fontWeight: 700,
-              letterSpacing: 1,
+              fontSize: 10,
+              fontWeight: 800,
+              letterSpacing: 3,
               textTransform: "uppercase",
               color: "var(--odoo-text-muted)",
-              marginBottom: 6,
+              marginBottom: 8,
             }}
           >
             {it.label}
           </div>
           <div
             style={{
-              fontSize: 26,
+              fontSize: 38,
               fontWeight: 600,
+              lineHeight: 1,
               color: it.color || "var(--odoo-text)",
             }}
           >
@@ -41,6 +48,13 @@ export default function KpiRow({ items }) {
           </div>
         </div>
       ))}
+      <style>{`
+        .kpi-card:hover {
+          border-color: var(--odoo-purple);
+          box-shadow: 0 8px 24px rgba(26,122,130,0.15);
+          transform: translateY(-3px);
+        }
+      `}</style>
     </div>
   );
 }

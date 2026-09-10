@@ -6,6 +6,7 @@ import ExportButtons from "../components/ExportButtons";
 import FileUploadSearch from "../components/FileUploadSearch";
 import WhatsAppShare from "../components/WhatsAppShare";
 import { ValueBySystemChart, Top10ValueChart } from "../components/TotalStockCharts";
+import HeroHeader from "../components/HeroHeader";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 
 const columns = [
@@ -17,22 +18,25 @@ const columns = [
 ];
 
 export default function TotalStockPage() {
-  const { reloadKey, lowStockThreshold } = useAppState();
+  const { reloadKey, lowStockThreshold, exactMatch, setLastRun } = useAppState();
   const [search, setSearch] = useState("");
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    getTotalStock({ codes: search })
-      .then((d) => setRows(d.rows))
+    getTotalStock({ codes: search, exact: exactMatch })
+      .then((d) => {
+        setRows(d.rows);
+        setLastRun(new Date().toLocaleTimeString());
+      })
       .catch(() => setRows([]))
       .finally(() => setLoading(false));
-  }, [search, reloadKey]);
+  }, [search, reloadKey, exactMatch, setLastRun]);
 
   return (
     <div style={{ padding: "18px 24px" }}>
-      <SectionTag>Total Stock</SectionTag>
+      <HeroHeader title="Total Stock" subtitle="SWAG Dashboard · Live Odoo Data" />
 
       <FilterBar>
         <FilterField label="Search Model / Product" width={320}>

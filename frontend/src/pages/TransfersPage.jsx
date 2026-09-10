@@ -4,6 +4,7 @@ import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
 import KpiRow from "../components/KpiRow";
 import ExportButtons from "../components/ExportButtons";
+import HeroHeader from "../components/HeroHeader";
 import { SectionTag } from "./TotalStockPage";
 
 const columns = [
@@ -37,7 +38,7 @@ export default function TransfersPage() {
 
   return (
     <div style={{ padding: "18px 24px" }}>
-      <SectionTag>Pending Transfers</SectionTag>
+      <HeroHeader title="Pending Transfers" subtitle="SWAG Dashboard · Live Odoo Data" />
 
       {ok.length > 0 && (
         <KpiRow

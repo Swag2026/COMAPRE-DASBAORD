@@ -6,6 +6,8 @@ const AppStateContext = createContext(null);
 export function AppStateProvider({ children }) {
   const [reloadKey, setReloadKey] = useState(0);
   const [lowStockThreshold, setLowStockThreshold] = useState(5);
+  const [exactMatch, setExactMatch] = useState(false);
+  const [lastRun, setLastRun] = useState(null);
 
   const triggerReload = async () => {
     try {
@@ -18,7 +20,12 @@ export function AppStateProvider({ children }) {
 
   return (
     <AppStateContext.Provider
-      value={{ reloadKey, triggerReload, lowStockThreshold, setLowStockThreshold }}
+      value={{
+        reloadKey, triggerReload,
+        lowStockThreshold, setLowStockThreshold,
+        exactMatch, setExactMatch,
+        lastRun, setLastRun,
+      }}
     >
       {children}
     </AppStateContext.Provider>

@@ -13,6 +13,11 @@ export async function getSystems() {
   return data;
 }
 
+export async function getSystemsHealth() {
+  const { data } = await api.get("/systems/health");
+  return data;
+}
+
 export async function getTotalStock({ codes = "", exact = false } = {}) {
   const { data } = await api.get("/total-stock", { params: { codes, exact } });
   return data;
