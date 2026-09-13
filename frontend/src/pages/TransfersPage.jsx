@@ -44,7 +44,7 @@ export default function TransfersPage() {
         <KpiRow
           items={[
             { label: "Total", value: ok.length },
-            { label: "Total Qty", value: totalQty.toLocaleString() },
+            { label: "Total Qty", value: totalQty, format: (v) => v.toLocaleString() },
             { label: "Systems", value: systemsCount },
           ]}
         />

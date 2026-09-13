@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { downloadFile } from "../utils/download";
+import { useToast } from "../api/ToastContext";
 import Spinner from "./Spinner";
 
 export default function ExportButtons({ exporters }) {
   const [busy, setBusy] = useState(null);
+  const { showToast } = useToast();
 
   async function run(key, fn, fallbackName) {
     setBusy(key);
     try {
       await downloadFile(fn(), fallbackName);
+      showToast(`${fallbackName} downloaded.`, "success");
     } catch (e) {
-      alert("Download fail ho gaya, dobara try karo.");
+      showToast("Download fail ho gaya, dobara try karo.", "error");
     } finally {
       setBusy(null);
     }

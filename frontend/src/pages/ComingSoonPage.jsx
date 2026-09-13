@@ -1,21 +1,24 @@
-import { SectionTag } from "./TotalStockPage";
+import HeroHeader from "../components/HeroHeader";
 
 export default function ComingSoonPage({ title }) {
   return (
     <div style={{ padding: "18px 24px" }}>
-      <SectionTag>{title}</SectionTag>
+      <HeroHeader title={title} subtitle="SWAG Dashboard · Coming Soon" />
       <div
         style={{
           background: "var(--odoo-surface)",
           border: "1px dashed var(--odoo-border-strong)",
           borderRadius: "var(--odoo-radius)",
-          padding: 40,
+          padding: 48,
           textAlign: "center",
           color: "var(--odoo-text-muted)",
         }}
       >
-        Yeh tab abhi Streamlit se React mein port nahi hua — Total Stock aur
-        Branch Stock ke baad iska number aayega.
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" style={{ margin: "0 auto 12px" }}>
+          <circle cx="28" cy="28" r="20" stroke="var(--odoo-border-strong)" strokeWidth="1.5" />
+          <path d="M28 18 L28 28 L35 33" stroke="var(--odoo-border-strong)" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+        <div>Yeh page abhi ban raha hai — jald hi available hoga.</div>
       </div>
     </div>
   );

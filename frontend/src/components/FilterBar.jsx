@@ -1,4 +1,4 @@
-export function FilterBar({ children }) {
+export function FilterBar({ children, sticky = false }) {
   return (
     <div
       style={{
@@ -11,6 +11,12 @@ export function FilterBar({ children }) {
         gap: 20,
         flexWrap: "wrap",
         alignItems: "flex-end",
+        ...(sticky && {
+          position: "sticky",
+          top: "var(--odoo-topbar-h)",
+          zIndex: 15,
+          boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+        }),
       }}
     >
       {children}

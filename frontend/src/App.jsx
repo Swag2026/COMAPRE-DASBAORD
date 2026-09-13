@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./api/AuthContext";
 import { AppStateProvider } from "./api/AppStateContext";
+import { ToastProvider } from "./api/ToastContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import TopBar from "./components/TopBar";
 import Sidebar from "./components/Sidebar";
@@ -82,9 +83,11 @@ export default function App() {
   return (
     <AuthProvider>
       <AppStateProvider>
-        <div style={{ minHeight: "100%", background: "var(--odoo-bg)" }}>
-          <AppRoutes />
-        </div>
+        <ToastProvider>
+          <div style={{ minHeight: "100%", background: "var(--odoo-bg)" }}>
+            <AppRoutes />
+          </div>
+        </ToastProvider>
       </AppStateProvider>
     </AuthProvider>
   );

@@ -16,6 +16,7 @@ import WhatsAppShare from "../components/WhatsAppShare";
 import ChipMultiSelect from "../components/ChipMultiSelect";
 import SizePivotTable, { buildSizePivot } from "../components/SizePivotTable";
 import Spinner from "../components/Spinner";
+import { useToast } from "../api/ToastContext";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 
 const ROW_CAP = 200;
@@ -66,6 +67,8 @@ export default function ProductComparisonPage() {
       .catch(() => {});
   }, []);
 
+  const { showToast } = useToast();
+
   async function runCompare() {
     setLoading(true);
     try {
@@ -76,9 +79,11 @@ export default function ProductComparisonPage() {
       setTotalRows(t.rows);
       setBranchRows(b.rows);
       setLastRun(new Date().toLocaleTimeString());
+      showToast("Comparison updated.", "success");
     } catch {
       setTotalRows([]);
       setBranchRows([]);
+      showToast("Compare fail ho gaya — check connection.", "error");
     } finally {
       setLoading(false);
     }
@@ -116,7 +121,7 @@ export default function ProductComparisonPage() {
     <div style={{ padding: "18px 24px" }}>
       <HeroHeader title="Product Comparison" subtitle="SWAG Dashboard · Live Odoo Data" />
 
-      <FilterBar>
+      <FilterBar sticky>
         <FilterField label="Company" width={280}>
           <ChipMultiSelect
             options={allSystems.map((s) => s.name)}
@@ -208,11 +213,11 @@ export default function ProductComparisonPage() {
 
           <KpiRow
             items={[
-              { label: "Total Rows", value: filteredTotal.length.toLocaleString() },
-              { label: "Systems Online", value: `${onlineCount}/${allSystems.length}` },
-              { label: "Total Qty", value: totalQty.toLocaleString() },
-              { label: "Avg Price (SAR)", value: avgPrice.toLocaleString() },
-              { label: "Stock Value (SAR)", value: stockValue >= 1000 ? `${(stockValue / 1000).toFixed(1)}K` : stockValue.toFixed(0) },
+              { label: "Total Rows", value: filteredTotal.length, format: (v) => v.toLocaleString() },
+              { label: "Systems Online", value: onlineCount, format: (v) => `${v}/${allSystems.length}` },
+              { label: "Total Qty", value: totalQty, format: (v) => v.toLocaleString() },
+              { label: "Avg Price (SAR)", value: avgPrice, format: (v) => v.toLocaleString() },
+              { label: "Stock Value (SAR)", value: stockValue, format: (v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}K` : v.toFixed(0)) },
               { label: "Zero Stock Items", value: zeroStockItems, color: zeroStockItems > 0 ? "var(--odoo-danger)" : undefined },
             ]}
           />
@@ -437,8 +442,8 @@ function BranchStockTab({ rows, loading, search, lowStockThreshold }) {
         <KpiRow
           items={[
             { label: "Branches", value: selBranches.length },
-            { label: "Total Units", value: totalUnits.toLocaleString() },
-            { label: "Models", value: modelsCount.toLocaleString() },
+            { label: "Total Units", value: totalUnits, format: (v) => v.toLocaleString() },
+            { label: "Models", value: modelsCount, format: (v) => v.toLocaleString() },
           ]}
         />
       )}

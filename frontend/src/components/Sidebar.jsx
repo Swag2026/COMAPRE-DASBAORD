@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../api/AuthContext";
 import { useAppState } from "../api/AppStateContext";
+import { useToast } from "../api/ToastContext";
 import Spinner from "./Spinner";
 
 const PAGES = [
@@ -20,11 +21,13 @@ export default function Sidebar() {
     lastRun,
   } = useAppState();
   const [reloading, setReloading] = useState(false);
+  const { showToast } = useToast();
 
   async function handleReload() {
     setReloading(true);
     try {
       await triggerReload();
+      showToast("Data cache cleared, refetching…", "info");
     } finally {
       setReloading(false);
     }

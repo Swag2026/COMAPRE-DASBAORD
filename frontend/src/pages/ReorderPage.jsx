@@ -99,7 +99,7 @@ export default function ReorderPage() {
           { label: "Critical", value: critical, color: "var(--odoo-danger)" },
           { label: "Low", value: low, color: "var(--odoo-warning)" },
           { label: "OK", value: okCount, color: "var(--odoo-success)" },
-          { label: "To Order", value: toOrder.toLocaleString() },
+          { label: "To Order", value: toOrder, format: (v) => v.toLocaleString() },
         ]}
       />
 
