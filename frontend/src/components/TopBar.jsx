@@ -1,3 +1,5 @@
+import MegaMenu from "./MegaMenu";
+
 export default function TopBar() {
   return (
     <div
@@ -31,6 +33,8 @@ export default function TopBar() {
         ))}
       </button>
       <div style={{ fontWeight: 600, fontSize: 15, letterSpacing: 0.2 }}>SWAG Dashboard</div>
+      <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.25)" }} />
+      <MegaMenu />
     </div>
   );
 }

@@ -49,9 +49,9 @@ export default function BranchQtyChart({ rows }) {
             axisLine={false}
             tickLine={false}
           />
-          <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} domain={[0, "auto"]} allowDecimals={false} />
           <Tooltip content={<BranchTooltip />} cursor={{ fill: "rgba(26,122,130,0.06)" }} />
-          <Legend wrapperStyle={{ fontSize: 11 }} />
+          <Legend verticalAlign="top" wrapperStyle={{ fontSize: 11, paddingBottom: 8 }} />
           {systems.map((sys, i) => (
             <Bar
               key={sys}
