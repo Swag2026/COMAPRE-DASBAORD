@@ -11,7 +11,9 @@ import KpiRow from "../components/KpiRow";
 import HeroHeader from "../components/HeroHeader";
 import BranchQtyChart from "../components/BranchQtyChart";
 import { ValueBySystemChart, Top10ValueChart } from "../components/TotalStockCharts";
-import FileUploadSearch from "../components/FileUploadSearch";
+import PdfUploadPanel from "../components/PdfUploadPanel";
+import ExcelUploadPanel from "../components/ExcelUploadPanel";
+import StockValueDonutCard from "../components/StockValueDonutCard";
 import WhatsAppShare from "../components/WhatsAppShare";
 import ChipMultiSelect from "../components/ChipMultiSelect";
 import SizePivotTable, { buildSizePivot } from "../components/SizePivotTable";
@@ -46,6 +48,7 @@ export default function ProductComparisonPage() {
   const [health, setHealth] = useState({}); // name -> bool
   const [selectedSystems, setSelectedSystems] = useState([]);
   const [search, setSearch] = useState("");
+  const [multiMode, setMultiMode] = useState(false);
   const [activeTab, setActiveTab] = useState("total");
   const [totalRows, setTotalRows] = useState(null); // null = not compared yet
   const [branchRows, setBranchRows] = useState(null);
@@ -69,12 +72,13 @@ export default function ProductComparisonPage() {
 
   const { showToast } = useToast();
 
-  async function runCompare() {
+  async function runCompare(overrideSearch) {
+    const codesToUse = overrideSearch !== undefined ? overrideSearch : search;
     setLoading(true);
     try {
       const [t, b] = await Promise.all([
-        getTotalStock({ codes: search, exact: exactMatch }),
-        getBranchStock({ codes: search, exact: exactMatch }),
+        getTotalStock({ codes: codesToUse, exact: exactMatch }),
+        getBranchStock({ codes: codesToUse, exact: exactMatch }),
       ]);
       setTotalRows(t.rows);
       setBranchRows(b.rows);
@@ -130,18 +134,41 @@ export default function ProductComparisonPage() {
             placeholder="Select companies…"
           />
         </FilterField>
-        <FilterField label="Search Model / Product" width={280}>
-          <input
-            style={inputStyle}
-            placeholder="e.g. RVT196 (comma-separated for many)"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+        <FilterField label="Mode" width={200}>
+          <div style={{ display: "flex", gap: 14, height: 34, alignItems: "center" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12.5 }}>
+              <input type="radio" checked={!multiMode} onChange={() => setMultiMode(false)} /> Single Model
+            </label>
+            <label style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12.5 }}>
+              <input type="radio" checked={multiMode} onChange={() => setMultiMode(true)} /> Multiple Models
+            </label>
+          </div>
         </FilterField>
-        <FilterField label="Search by Invoice PDF / Excel" width={220}>
-          <FileUploadSearch onCodesExtracted={(codes) => setSearch(codes.join(","))} />
-        </FilterField>
+        {!multiMode ? (
+          <FilterField label="Search Model / Product" width={280}>
+            <input
+              style={inputStyle}
+              placeholder="e.g. RVT196"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </FilterField>
+        ) : (
+          <FilterField label="Codes (one per line, or comma-separated)" width={320}>
+            <textarea
+              style={{ ...inputStyle, height: 68, resize: "vertical", paddingTop: 6 }}
+              placeholder={"ABC123\nDEF456"}
+              value={search}
+              onChange={(e) => setSearch(e.target.value.replace(/\n/g, ","))}
+            />
+          </FilterField>
+        )}
       </FilterBar>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 16 }}>
+        <PdfUploadPanel onSearch={(codes, tab) => { setSearch(codes); setActiveTab(tab); runCompare(codes); }} />
+        <ExcelUploadPanel onSearch={(codes, tab) => { setSearch(codes); setActiveTab(tab); runCompare(codes); }} />
+      </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
         <button onClick={runCompare} disabled={loading} style={compareBtnStyle}>
@@ -371,12 +398,15 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
       )}
 
       {!sizeView && (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14, marginBottom: 14 }}>
           <ChartCard title="Stock Value by System">
             <ValueBySystemChart rows={filtered} />
           </ChartCard>
           <ChartCard title="Top 10 Models by Stock Value">
             <Top10ValueChart rows={filtered} />
+          </ChartCard>
+          <ChartCard title="">
+            <StockValueDonutCard rows={filtered} />
           </ChartCard>
         </div>
       )}
@@ -509,7 +539,7 @@ function BranchPicker({ options, selected, onChange }) {
 function ChartCard({ title, children }) {
   return (
     <div style={{ background: "var(--odoo-surface)", border: "1px solid var(--odoo-border)", borderRadius: "var(--odoo-radius)", padding: 14 }}>
-      <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>{title}</div>
+      {title && <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>{title}</div>}
       {children}
     </div>
   );

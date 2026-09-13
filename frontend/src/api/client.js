@@ -77,6 +77,35 @@ export async function extractCodes(file) {
   return data;
 }
 
+export async function uploadPdf(file, mode = "main") {
+  const form = new FormData();
+  form.append("file", file);
+  form.append("mode", mode);
+  const { data } = await api.post("/upload/pdf", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+}
+
+export async function uploadTablePreview(file) {
+  const form = new FormData();
+  form.append("file", file);
+  const { data } = await api.post("/upload/table-preview", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+}
+
+export async function uploadTableExtract(file, column) {
+  const form = new FormData();
+  form.append("file", file);
+  form.append("column", column);
+  const { data } = await api.post("/upload/table-extract", form, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
+}
+
 export async function clearServerCache() {
   const { data } = await api.post("/cache/clear");
   return data;
