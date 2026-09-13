@@ -171,7 +171,7 @@ export default function ProductComparisonPage() {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
-        <button onClick={runCompare} disabled={loading} style={compareBtnStyle}>
+        <button onClick={() => runCompare()} disabled={loading} style={compareBtnStyle}>
           {loading ? (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               <Spinner size={15} color="#fff" /> Comparing…
