@@ -15,6 +15,7 @@ import FileUploadSearch from "../components/FileUploadSearch";
 import WhatsAppShare from "../components/WhatsAppShare";
 import ChipMultiSelect from "../components/ChipMultiSelect";
 import SizePivotTable, { buildSizePivot } from "../components/SizePivotTable";
+import Spinner from "../components/Spinner";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 
 const ROW_CAP = 200;
@@ -139,7 +140,13 @@ export default function ProductComparisonPage() {
 
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
         <button onClick={runCompare} disabled={loading} style={compareBtnStyle}>
-          {loading ? "Comparing…" : "Compare →"}
+          {loading ? (
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+              <Spinner size={15} color="#fff" /> Comparing…
+            </span>
+          ) : (
+            "Compare →"
+          )}
         </button>
         <div style={{ display: "flex", gap: 14, fontSize: 12 }}>
           {allSystems.map((s) => (

@@ -1,6 +1,8 @@
 import { NavLink } from "react-router-dom";
+import { useState } from "react";
 import { useAuth } from "../api/AuthContext";
 import { useAppState } from "../api/AppStateContext";
+import Spinner from "./Spinner";
 
 const PAGES = [
   { to: "/product-comparison", label: "Product Comparison" },
@@ -17,6 +19,16 @@ export default function Sidebar() {
     exactMatch, setExactMatch,
     lastRun,
   } = useAppState();
+  const [reloading, setReloading] = useState(false);
+
+  async function handleReload() {
+    setReloading(true);
+    try {
+      await triggerReload();
+    } finally {
+      setReloading(false);
+    }
+  }
 
   return (
     <div
@@ -70,8 +82,14 @@ export default function Sidebar() {
       <button onClick={logout} style={sidebarBtnStyle()}>
         Logout →
       </button>
-      <button onClick={triggerReload} style={sidebarBtnStyle("solid")}>
-        ⟳ Reload Data
+      <button onClick={handleReload} disabled={reloading} style={sidebarBtnStyle("solid")}>
+        {reloading ? (
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <Spinner size={13} /> Reloading…
+          </span>
+        ) : (
+          "⟳ Reload Data"
+        )}
       </button>
 
       <Divider />

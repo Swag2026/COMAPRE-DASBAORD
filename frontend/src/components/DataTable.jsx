@@ -1,7 +1,12 @@
+import Spinner from "./Spinner";
+
 export default function DataTable({ columns, rows, loading, emptyText = "No data for selected filters.", lowStockThreshold = 0 }) {
   if (loading) {
     return (
-      <div style={{ padding: 40, textAlign: "center", color: "var(--odoo-text-muted)" }}>
+      <div style={{ padding: 50, textAlign: "center", color: "var(--odoo-text-muted)" }}>
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
+          <Spinner size={28} />
+        </div>
         Loading…
       </div>
     );

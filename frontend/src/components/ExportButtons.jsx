@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { downloadFile } from "../utils/download";
+import Spinner from "./Spinner";
 
 export default function ExportButtons({ exporters }) {
   const [busy, setBusy] = useState(null);
@@ -31,9 +32,13 @@ export default function ExportButtons({ exporters }) {
             borderRadius: 6,
             fontSize: 12.5,
             fontWeight: 600,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
           }}
         >
-          {busy === exp.key ? "…" : exp.label}
+          {busy === exp.key ? <Spinner size={13} /> : null}
+          {busy === exp.key ? "Downloading…" : exp.label}
         </button>
       ))}
     </div>
