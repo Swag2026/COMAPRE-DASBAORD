@@ -100,7 +100,7 @@ function RichTooltip({ active, payload, unit, extraKey, extraLabel, systemKey })
 function EmptyChart() {
   return (
     <div style={{ padding: 24, textAlign: "center", color: "var(--odoo-text-muted)", fontSize: 12.5 }}>
-      Chart ke liye koi data nahi.
+      No data for this chart.
     </div>
   );
 }

@@ -44,42 +44,19 @@ export default function Sidebar() {
         flexDirection: "column",
         padding: "16px 14px",
         gap: 14,
-        height: "100vh",
+        height: "calc(100vh - var(--odoo-topbar-h))",
         position: "sticky",
-        top: 0,
+        top: "var(--odoo-topbar-h)",
         overflowY: "auto",
       }}
     >
-      {/* Brand */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          paddingBottom: 14,
-          borderBottom: "1px solid var(--odoo-border)",
-        }}
-      >
-        <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
-          <path d="M16 2 L28 16 L16 30 L4 16 Z" stroke="#4AACB4" strokeWidth="1" fill="rgba(74,172,180,0.06)" />
-          <path d="M16 9 L23 16 L16 23 L9 16 Z" fill="#4AACB4" opacity="0.35" />
-          <circle cx="16" cy="2" r="1.5" fill="#D4A84B" />
-          <circle cx="28" cy="16" r="1.5" fill="#D4A84B" />
-          <circle cx="16" cy="30" r="1.5" fill="#D4A84B" />
-          <circle cx="4" cy="16" r="1.5" fill="#D4A84B" />
-        </svg>
-        <div>
-          <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: 2, textTransform: "uppercase" }}>
-            SWAG
-          </div>
-          <div style={{ fontSize: 8, letterSpacing: 2, color: "var(--odoo-purple)", textTransform: "uppercase", fontWeight: 700 }}>
-            Dashboard
-          </div>
+      <div style={{ paddingBottom: 12, borderBottom: "1px solid var(--odoo-border)" }}>
+        <div style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "var(--odoo-text-faint)", fontWeight: 700, marginBottom: 4 }}>
+          Signed in as
         </div>
-      </div>
-
-      <div style={{ fontSize: 10.5, color: "var(--odoo-text-faint)", wordBreak: "break-all", letterSpacing: 0.5 }}>
-        {username}
+        <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--odoo-text)", wordBreak: "break-all" }}>
+          {username}
+        </div>
       </div>
 
       <button onClick={logout} style={sidebarBtnStyle()}>

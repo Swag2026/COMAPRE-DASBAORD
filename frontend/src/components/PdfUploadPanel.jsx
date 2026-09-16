@@ -21,7 +21,7 @@ export default function PdfUploadPanel({ onSearch }) {
       setResult(data);
     } catch (err) {
       showToast(
-        err?.response?.status === 422 ? "PDF mein koi model code nahi mila." : "PDF padhne mein error aaya.",
+        err?.response?.status === 422 ? "No model codes found in the PDF." : "Error reading the PDF.",
         "error"
       );
     } finally {
@@ -31,7 +31,7 @@ export default function PdfUploadPanel({ onSearch }) {
 
   function pick(tab) {
     onSearch(result.codes.join(","), tab);
-    showToast(`${result.codes.length} codes ${tab === "total" ? "Total Stock" : "Branch Stock"} mein search ho rahe hain.`, "success");
+    showToast(`Searching ${result.codes.length} codes in ${tab === "total" ? "Total Stock" : "Branch Stock"}.`, "success");
   }
 
   return (

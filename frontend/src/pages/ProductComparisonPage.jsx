@@ -87,7 +87,7 @@ export default function ProductComparisonPage() {
     } catch {
       setTotalRows([]);
       setBranchRows([]);
-      showToast("Compare fail ho gaya — check connection.", "error");
+      showToast("Compare failed — check your connection.", "error");
     } finally {
       setLoading(false);
     }
@@ -211,7 +211,7 @@ export default function ProductComparisonPage() {
             borderRadius: "var(--odoo-radius)",
           }}
         >
-          Company aur search set karo, phir <b>Compare →</b> dabao.
+          Set your company and search, then hit <b>Compare →</b>.
         </div>
       )}
 

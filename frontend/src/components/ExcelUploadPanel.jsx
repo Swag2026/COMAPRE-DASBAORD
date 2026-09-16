@@ -26,7 +26,7 @@ export default function ExcelUploadPanel({ onSearch }) {
       setColumn(p.guessed_column);
       await runExtract(f, p.guessed_column);
     } catch (err) {
-      showToast(err?.response?.status === 422 ? "File khaali hai." : "File padhne mein error aaya.", "error");
+      showToast(err?.response?.status === 422 ? "The file is empty." : "Error reading the file.", "error");
     } finally {
       setBusy(false);
     }
@@ -50,7 +50,7 @@ export default function ExcelUploadPanel({ onSearch }) {
 
   function pick(tab) {
     onSearch(extracted.codes.join(","), tab);
-    showToast(`${extracted.codes.length} codes ${tab === "total" ? "Total Stock" : "Branch Stock"} mein search ho rahe hain.`, "success");
+    showToast(`Searching ${extracted.codes.length} codes in ${tab === "total" ? "Total Stock" : "Branch Stock"}.`, "success");
   }
 
   return (

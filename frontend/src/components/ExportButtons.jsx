@@ -13,7 +13,7 @@ export default function ExportButtons({ exporters }) {
       await downloadFile(fn(), fallbackName);
       showToast(`${fallbackName} downloaded.`, "success");
     } catch (e) {
-      showToast("Download fail ho gaya, dobara try karo.", "error");
+      showToast("Download failed, please try again.", "error");
     } finally {
       setBusy(null);
     }

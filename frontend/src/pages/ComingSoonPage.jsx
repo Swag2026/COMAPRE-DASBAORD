@@ -18,7 +18,7 @@ export default function ComingSoonPage({ title }) {
           <circle cx="28" cy="28" r="20" stroke="var(--odoo-border-strong)" strokeWidth="1.5" />
           <path d="M28 18 L28 28 L35 33" stroke="var(--odoo-border-strong)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
-        <div>Yeh page abhi ban raha hai — jald hi available hoga.</div>
+        <div>This page is under construction — available soon.</div>
       </div>
     </div>
   );

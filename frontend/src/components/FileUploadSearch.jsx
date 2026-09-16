@@ -20,8 +20,8 @@ export default function FileUploadSearch({ onCodesExtracted }) {
     } catch (err) {
       setError(
         err?.response?.status === 422
-          ? "File mein koi model code nahi mila."
-          : "File padhne mein error aaya — PDF/Excel/CSV try karo."
+          ? "No model codes found in the file."
+          : "Error reading the file — try PDF/Excel/CSV."
       );
     } finally {
       setBusy(false);
@@ -41,12 +41,12 @@ export default function FileUploadSearch({ onCodesExtracted }) {
       />
       {busy && (
         <div style={{ fontSize: 11.5, color: "var(--odoo-text-muted)", marginTop: 4 }}>
-          Padh raha hoon…
+          Reading…
         </div>
       )}
       {lastCount != null && !busy && (
         <div style={{ fontSize: 11.5, color: "var(--odoo-success)", marginTop: 4 }}>
-          {lastCount} model codes mile, search mein daal diye.
+          Found {lastCount} model codes, added to search.
         </div>
       )}
       {error && (
