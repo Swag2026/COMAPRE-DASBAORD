@@ -1,16 +1,10 @@
-import { NavLink } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../api/AuthContext";
 import { useAppState } from "../api/AppStateContext";
 import { useToast } from "../api/ToastContext";
+import { NAV_ITEMS } from "./MegaMenu";
 import Spinner from "./Spinner";
-
-const PAGES = [
-  { to: "/product-comparison", label: "Product Comparison" },
-  { to: "/reorder", label: "Reorder Suggestions" },
-  { to: "/transfers", label: "Pending Transfers" },
-  { to: "/season-comparison", label: "Season Comparison" },
-];
 
 export default function Sidebar() {
   const { username, logout } = useAuth();
@@ -22,6 +16,8 @@ export default function Sidebar() {
   } = useAppState();
   const [reloading, setReloading] = useState(false);
   const { showToast } = useToast();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   async function handleReload() {
     setReloading(true);
@@ -36,84 +32,113 @@ export default function Sidebar() {
   return (
     <div
       style={{
-        width: 240,
+        width: 250,
         flexShrink: 0,
-        background: "var(--odoo-surface)",
-        borderRight: "1px solid var(--odoo-border)",
+        background: "linear-gradient(180deg, #0F0F10 0%, #0A0A0A 100%)",
+        borderRight: "1px solid rgba(255,255,255,0.06)",
         display: "flex",
         flexDirection: "column",
-        padding: "16px 14px",
-        gap: 14,
+        padding: "18px 14px",
+        gap: 16,
         height: "calc(100vh - var(--odoo-topbar-h))",
         position: "sticky",
         top: "var(--odoo-topbar-h)",
         overflowY: "auto",
+        color: "#fff",
       }}
     >
-      <div style={{ paddingBottom: 12, borderBottom: "1px solid var(--odoo-border)" }}>
-        <div style={{ fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: "var(--odoo-text-faint)", fontWeight: 700, marginBottom: 4 }}>
+      <div style={{ paddingBottom: 14, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ fontSize: 9.5, letterSpacing: 1.5, textTransform: "uppercase", color: "rgba(255,255,255,0.35)", fontWeight: 700, marginBottom: 4 }}>
           Signed in as
         </div>
-        <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--odoo-text)", wordBreak: "break-all" }}>
+        <div style={{ fontSize: 12.5, fontWeight: 600, color: "#fff", wordBreak: "break-all" }}>
           {username}
         </div>
       </div>
 
-      <button onClick={logout} style={sidebarBtnStyle()}>
-        Logout →
-      </button>
-      <button onClick={handleReload} disabled={reloading} style={sidebarBtnStyle("solid")}>
-        {reloading ? (
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <Spinner size={13} /> Reloading…
-          </span>
-        ) : (
-          "⟳ Reload Data"
-        )}
-      </button>
+      <div style={{ display: "flex", gap: 8 }}>
+        <button onClick={logout} style={darkBtnStyle()}>
+          Logout →
+        </button>
+        <button onClick={handleReload} disabled={reloading} style={darkBtnStyle("solid")}>
+          {reloading ? <Spinner size={13} /> : "⟳ Reload"}
+        </button>
+      </div>
 
       <Divider />
 
-      <div>
-        <div style={labelStyle}>Page</div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {PAGES.map((p) => (
-            <NavLink
-              key={p.to}
-              to={p.to}
-              style={({ isActive }) => ({
-                display: "block",
-                padding: "9px 12px",
-                borderRadius: 8,
-                fontSize: 12.5,
-                fontWeight: 600,
-                textDecoration: "none",
-                background: isActive ? "var(--odoo-purple)" : "transparent",
-                color: isActive ? "#fff" : "var(--odoo-text)",
-                border: isActive ? "none" : "1px solid var(--odoo-border-strong)",
-              })}
-            >
-              {p.label}
-            </NavLink>
+      {NAV_ITEMS.map((group) => (
+        <div key={group.label}>
+          <div style={groupLabelStyle}>{group.label}</div>
+          {group.subMenus.map((sub) => (
+            <div key={sub.title} style={{ marginBottom: 10 }}>
+              <div style={subLabelStyle}>{sub.title}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {sub.items.map((item) => {
+                  const Icon = item.icon;
+                  const active = pathname === item.to;
+                  return (
+                    <button
+                      key={item.label}
+                      onClick={() => navigate(item.to)}
+                      className="sb-item"
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 9,
+                        textAlign: "left",
+                        padding: "8px 8px",
+                        borderRadius: 10,
+                        border: "none",
+                        cursor: "pointer",
+                        background: active ? "rgba(255,255,255,0.08)" : "transparent",
+                      }}
+                    >
+                      <span
+                        className="sb-icon"
+                        style={{
+                          width: 30,
+                          height: 30,
+                          flexShrink: 0,
+                          borderRadius: 8,
+                          border: `1px solid ${active ? "#fff" : "rgba(255,255,255,0.25)"}`,
+                          background: active ? "#fff" : "transparent",
+                          color: active ? "#0A0A0A" : "#fff",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Icon size={15} />
+                      </span>
+                      <span>
+                        <span style={{ display: "block", fontSize: 12.5, fontWeight: 600, color: "#fff" }}>{item.label}</span>
+                        <span style={{ display: "block", fontSize: 10.5, color: "rgba(255,255,255,0.4)" }}>{item.description}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
-      </div>
+      ))}
 
       <Divider />
 
       <div
         style={{
-          background: "rgba(26,122,130,0.08)",
-          border: "1.5px solid rgba(26,122,130,0.25)",
-          borderRadius: 8,
+          background: "rgba(5,150,105,0.1)",
+          border: "1px solid rgba(5,150,105,0.3)",
+          borderRadius: 10,
           padding: "10px 12px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 9.5, fontWeight: 800, letterSpacing: 1.5, textTransform: "uppercase", color: "var(--odoo-purple)", marginBottom: 3 }}>
-          <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--odoo-success)" }} />
+        <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 9.5, fontWeight: 800, letterSpacing: 1.5, textTransform: "uppercase", color: "#34D399", marginBottom: 3 }}>
+          <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#34D399" }} />
           App Active
         </div>
-        <div style={{ fontSize: 10, color: "var(--odoo-text-faint)" }}>
+        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>
           Auto-refresh keeps app awake
         </div>
       </div>
@@ -121,13 +146,9 @@ export default function Sidebar() {
       <Divider />
 
       <div>
-        <div style={labelStyle}>Search Mode</div>
-        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, cursor: "pointer" }}>
-          <input
-            type="checkbox"
-            checked={exactMatch}
-            onChange={(e) => setExactMatch(e.target.checked)}
-          />
+        <div style={groupLabelStyle}>Search Mode</div>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, cursor: "pointer", color: "#fff" }}>
+          <input type="checkbox" checked={exactMatch} onChange={(e) => setExactMatch(e.target.checked)} />
           Exact match
         </label>
       </div>
@@ -135,8 +156,8 @@ export default function Sidebar() {
       <Divider />
 
       <div>
-        <div style={labelStyle}>Low Stock Alert</div>
-        <div style={{ fontSize: 11, color: "var(--odoo-text-muted)", marginBottom: 6 }}>
+        <div style={groupLabelStyle}>Low Stock Alert</div>
+        <div style={{ fontSize: 10.5, color: "rgba(255,255,255,0.4)", marginBottom: 6 }}>
           Threshold (qty ≤)
         </div>
         <input
@@ -148,8 +169,10 @@ export default function Sidebar() {
             width: "100%",
             height: 32,
             padding: "0 10px",
-            border: "1px solid var(--odoo-border-strong)",
-            borderRadius: 6,
+            border: "1px solid rgba(255,255,255,0.2)",
+            background: "rgba(255,255,255,0.06)",
+            color: "#fff",
+            borderRadius: 8,
             fontSize: 13,
           }}
         />
@@ -159,49 +182,56 @@ export default function Sidebar() {
         <>
           <Divider />
           <div>
-            <div style={labelStyle}>Last Run</div>
-            <div style={{ fontSize: 11, color: "var(--odoo-text-muted)" }}>{lastRun}</div>
+            <div style={groupLabelStyle}>Last Run</div>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>{lastRun}</div>
           </div>
         </>
       )}
 
       <div style={{ flex: 1 }} />
+      <style>{`
+        .sb-item:hover { background: rgba(255,255,255,0.06) !important; }
+        .sb-item:hover .sb-icon { background: #fff; color: #0A0A0A; border-color: #fff; }
+      `}</style>
     </div>
   );
 }
 
 function Divider() {
-  return <div style={{ borderTop: "1px solid var(--odoo-border)" }} />;
+  return <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }} />;
 }
 
-const labelStyle = {
-  fontSize: 10.5,
+const groupLabelStyle = {
+  fontSize: 10,
   fontWeight: 700,
-  letterSpacing: 1,
+  letterSpacing: 1.5,
   textTransform: "uppercase",
-  color: "var(--odoo-purple)",
+  color: "rgba(255,255,255,0.5)",
   marginBottom: 8,
 };
 
-function sidebarBtnStyle(variant) {
-  if (variant === "solid") {
-    return {
-      height: 36,
-      border: "1px solid var(--odoo-purple)",
-      background: "var(--odoo-purple-pale)",
-      color: "var(--odoo-purple)",
-      borderRadius: 8,
-      fontSize: 12.5,
-      fontWeight: 600,
-    };
-  }
-  return {
+const subLabelStyle = {
+  fontSize: 9,
+  fontWeight: 500,
+  textTransform: "capitalize",
+  color: "rgba(255,255,255,0.3)",
+  marginBottom: 6,
+};
+
+function darkBtnStyle(variant) {
+  const base = {
+    flex: 1,
     height: 34,
-    border: "1px solid var(--odoo-border-strong)",
-    background: "#fff",
-    color: "var(--odoo-text)",
     borderRadius: 8,
-    fontSize: 12.5,
+    fontSize: 12,
     fontWeight: 600,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
   };
+  if (variant === "solid") {
+    return { ...base, border: "1px solid rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.1)", color: "#fff" };
+  }
+  return { ...base, border: "1px solid rgba(255,255,255,0.15)", background: "transparent", color: "rgba(255,255,255,0.8)" };
 }
