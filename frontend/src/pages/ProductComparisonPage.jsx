@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { List, Wifi, Package, Tag, Wallet, AlertTriangle, Building2, Layers } from "lucide-react";
 import {
   getSystems, getSystemsHealth, getTotalStock, getBranchStock,
   exportTotalCsv, exportTotalXlsx,
@@ -240,12 +241,12 @@ export default function ProductComparisonPage() {
 
           <KpiRow
             items={[
-              { label: "Total Rows", value: filteredTotal.length, format: (v) => v.toLocaleString() },
-              { label: "Systems Online", value: onlineCount, format: (v) => `${v}/${allSystems.length}` },
-              { label: "Total Qty", value: totalQty, format: (v) => v.toLocaleString() },
-              { label: "Avg Price (SAR)", value: avgPrice, format: (v) => v.toLocaleString() },
-              { label: "Stock Value (SAR)", value: stockValue, format: (v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}K` : v.toFixed(0)) },
-              { label: "Zero Stock Items", value: zeroStockItems, color: zeroStockItems > 0 ? "var(--odoo-danger)" : undefined },
+              { label: "Total Rows", value: filteredTotal.length, format: (v) => v.toLocaleString(), icon: List },
+              { label: "Systems Online", value: onlineCount, format: (v) => `${v}/${allSystems.length}`, icon: Wifi, tone: "good" },
+              { label: "Total Qty", value: totalQty, format: (v) => v.toLocaleString(), icon: Package },
+              { label: "Avg Price (SAR)", value: avgPrice, format: (v) => v.toLocaleString(), icon: Tag },
+              { label: "Stock Value (SAR)", value: stockValue, format: (v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}K` : v.toFixed(0)), icon: Wallet },
+              { label: "Zero Stock Items", value: zeroStockItems, icon: AlertTriangle, tone: zeroStockItems > 0 ? "bad" : "default" },
             ]}
           />
 
@@ -471,9 +472,9 @@ function BranchStockTab({ rows, loading, search, lowStockThreshold }) {
       {selBranches.length > 0 && filtered.length > 0 && (
         <KpiRow
           items={[
-            { label: "Branches", value: selBranches.length },
-            { label: "Total Units", value: totalUnits, format: (v) => v.toLocaleString() },
-            { label: "Models", value: modelsCount, format: (v) => v.toLocaleString() },
+            { label: "Branches", value: selBranches.length, icon: Building2 },
+            { label: "Total Units", value: totalUnits, format: (v) => v.toLocaleString(), icon: Package },
+            { label: "Models", value: modelsCount, format: (v) => v.toLocaleString(), icon: Layers },
           ]}
         />
       )}

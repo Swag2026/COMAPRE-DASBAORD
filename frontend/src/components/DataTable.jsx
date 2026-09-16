@@ -9,7 +9,6 @@ export default function DataTable({
 }) {
   const [sortKey, setSortKey] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
-  const [scrolled, setScrolled] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const wrapRef = useRef(null);
 
@@ -37,7 +36,7 @@ export default function DataTable({
 
   if (loading) {
     return (
-      <div style={{ background: "var(--odoo-surface)", border: "2px solid var(--odoo-border)", borderRadius: "var(--odoo-radius)", overflow: "hidden" }}>
+      <div style={{ background: "var(--odoo-surface)", border: "1px solid var(--odoo-border)", borderRadius: "var(--odoo-radius)", overflow: "hidden" }}>
         <SkeletonRows columns={columns} />
       </div>
     );
@@ -51,7 +50,7 @@ export default function DataTable({
           textAlign: "center",
           color: "var(--odoo-text-muted)",
           background: "var(--odoo-surface)",
-          border: "2px solid var(--odoo-border)",
+          border: "1px solid var(--odoo-border)",
           borderRadius: "var(--odoo-radius)",
         }}
       >
@@ -66,16 +65,17 @@ export default function DataTable({
       <div
         ref={wrapRef}
         className="swag-table-wrap"
-        onScroll={(e) => setScrolled(e.currentTarget.scrollTop > 2)}
         style={{
+          position: "relative",
           background: "var(--odoo-surface)",
-          border: "2px solid var(--odoo-border)",
+          border: "1px solid var(--odoo-border)",
           borderRadius: "var(--odoo-radius)",
           overflow: "auto",
           maxHeight: 560,
+          boxShadow: "inset 14px 0 10px -10px rgba(45,25,40,.14), inset -14px 0 10px -10px rgba(45,25,40,.14)",
         }}
       >
-        <table>
+        <table style={{ "--table-line": "#E3DDDD" }}>
           <thead>
             <tr>
               {columns.map((c) => {
@@ -87,24 +87,21 @@ export default function DataTable({
                     style={{
                       position: "sticky",
                       top: 0,
-                      background: "var(--odoo-purple)",
-                      color: "#fff",
-                      textAlign: c.align === "right" ? "right" : "left",
-                      padding: "12px 14px",
-                      fontSize: 10.5,
+                      background: "linear-gradient(180deg, #FBFBFB, #F0EEEE)",
+                      color: "var(--odoo-text)",
+                      textAlign: "center",
+                      padding: "10px 12px",
+                      fontSize: 11.5,
                       fontWeight: 700,
-                      letterSpacing: 1.5,
-                      textTransform: "uppercase",
                       whiteSpace: "nowrap",
                       cursor: "pointer",
                       userSelect: "none",
-                      boxShadow: scrolled ? "0 4px 10px rgba(0,0,0,0.18)" : "none",
-                      transition: "box-shadow 0.15s",
+                      borderBottom: "1.5px solid #C7C1C1",
                     }}
                     title="Click to sort"
                   >
                     {c.label}
-                    {isSorted && <span style={{ marginLeft: 5 }}>{sortDir === "asc" ? "▲" : "▼"}</span>}
+                    {isSorted && <span style={{ marginLeft: 5, fontSize: 10, opacity: 0.7 }}>{sortDir === "asc" ? "▲" : "▼"}</span>}
                   </th>
                 );
               })}
@@ -115,15 +112,14 @@ export default function DataTable({
               const qty = row.on_hand;
               const isZero = qty === 0;
               const isLow = qty > 0 && qty <= lowStockThreshold;
-              const rowBg = isLow ? "#FFFBEB" : i % 2 === 0 ? "var(--odoo-surface)" : "#F9FAFB";
               return (
                 <tr
                   key={i}
                   className="swag-row"
                   onClick={() => setSelectedRow(row)}
                   style={{
-                    background: rowBg,
-                    borderBottom: "1px solid #F3F4F6",
+                    background: isLow ? "var(--brand-gold-bg, #FBF0DB)" : "transparent",
+                    borderBottom: "1px solid #E3DDDD",
                     animation: "fadeRow 0.25s ease both",
                     animationDelay: `${Math.min(i, 30) * 0.01}s`,
                     cursor: "pointer",
@@ -135,10 +131,10 @@ export default function DataTable({
                       <td
                         key={c.key}
                         style={{
-                          padding: "9px 14px",
-                          textAlign: c.align === "right" ? "right" : "left",
+                          padding: "8px 12px",
+                          textAlign: c.align === "right" ? "right" : "center",
                           color: isLow
-                            ? "#92400E"
+                            ? "#8A5A17"
                             : isQtyCol && isZero
                             ? "var(--odoo-danger)"
                             : "var(--odoo-text)",
@@ -147,7 +143,28 @@ export default function DataTable({
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {c.render ? c.render(row) : row[c.key]}
+                        {isQtyCol ? (
+                          <span
+                            style={
+                              isZero || isLow
+                                ? {
+                                    display: "inline-block",
+                                    minWidth: 28,
+                                    padding: "2px 9px",
+                                    borderRadius: 999,
+                                    fontSize: 12,
+                                    fontWeight: 700,
+                                    background: isZero ? "#FBE8E4" : "#FBF0DB",
+                                    color: isZero ? "#A93226" : "#B5842A",
+                                  }
+                                : undefined
+                            }
+                          >
+                            {c.render ? c.render(row) : row[c.key]}
+                          </span>
+                        ) : (
+                          c.render ? c.render(row) : row[c.key]
+                        )}
                       </td>
                     );
                   })}
@@ -157,8 +174,12 @@ export default function DataTable({
           </tbody>
         </table>
         <style>{`
-          .swag-table-wrap table { border-collapse: collapse; width: 100%; }
-          .swag-row:hover td { background: #EEF9FA !important; }
+          .swag-table-wrap table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+          .swag-row:hover td { background: #F0EEEE !important; }
+          .swag-table-wrap::-webkit-scrollbar { width: 9px; height: 9px; }
+          .swag-table-wrap::-webkit-scrollbar-track { background: transparent; }
+          .swag-table-wrap::-webkit-scrollbar-thumb { background: var(--odoo-border); border-radius: 99px; }
+          .swag-table-wrap::-webkit-scrollbar-thumb:hover { background: var(--odoo-purple-light); }
         `}</style>
       </div>
 

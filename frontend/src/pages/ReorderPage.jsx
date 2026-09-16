@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { AlertOctagon, AlertTriangle, CheckCircle2, ShoppingCart } from "lucide-react";
 import { getReorder, exportReorderCsv, exportReorderXlsx } from "../api/client";
 import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
@@ -96,10 +97,10 @@ export default function ReorderPage() {
 
       <KpiRow
         items={[
-          { label: "Critical", value: critical, color: "var(--odoo-danger)" },
-          { label: "Low", value: low, color: "var(--odoo-warning)" },
-          { label: "OK", value: okCount, color: "var(--odoo-success)" },
-          { label: "To Order", value: toOrder, format: (v) => v.toLocaleString() },
+          { label: "Critical", value: critical, icon: AlertOctagon, tone: "bad" },
+          { label: "Low", value: low, icon: AlertTriangle, tone: "warn" },
+          { label: "OK", value: okCount, icon: CheckCircle2, tone: "good" },
+          { label: "To Order", value: toOrder, format: (v) => v.toLocaleString(), icon: ShoppingCart },
         ]}
       />
 

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Truck, Package, Building2 } from "lucide-react";
 import { getTransfers, exportTransfersCsv, exportTransfersXlsx } from "../api/client";
 import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
@@ -43,9 +44,9 @@ export default function TransfersPage() {
       {ok.length > 0 && (
         <KpiRow
           items={[
-            { label: "Total", value: ok.length },
-            { label: "Total Qty", value: totalQty, format: (v) => v.toLocaleString() },
-            { label: "Systems", value: systemsCount },
+            { label: "Total", value: ok.length, icon: Truck },
+            { label: "Total Qty", value: totalQty, format: (v) => v.toLocaleString(), icon: Package },
+            { label: "Systems", value: systemsCount, icon: Building2 },
           ]}
         />
       )}
