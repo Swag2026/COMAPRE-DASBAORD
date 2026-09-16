@@ -2,7 +2,7 @@ export default function HeroHeader({ title, subtitle }) {
   return (
     <div
       style={{
-        background: "linear-gradient(135deg, #1A7A82 0%, #145F66 50%, #0D4A50 100%)",
+        background: "linear-gradient(135deg, #714B67 0%, #4E3247 50%, #2F1F2B 100%)",
         borderRadius: 16,
         padding: "26px 30px",
         marginBottom: 18,

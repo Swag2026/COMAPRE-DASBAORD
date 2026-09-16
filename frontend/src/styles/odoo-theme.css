@@ -1,29 +1,29 @@
 :root {
-  /* SWAG brand — teal + gold, matching the original dashboard */
-  --odoo-purple: #1A7A82;        /* primary teal (kept var name so components don't need renaming) */
-  --odoo-purple-dark: #145F66;
-  --odoo-purple-light: #4AACB4;
-  --odoo-purple-pale: #EAF6F7;
+  /* Adopted from the rent-tracker app's palette */
+  --odoo-purple: #714B67;        /* accent-fg (kept var name so components don't need renaming) */
+  --odoo-purple-dark: #4E3247;
+  --odoo-purple-light: #8B5E7E;
+  --odoo-purple-pale: #F1E6EE;
 
-  --brand-gold: #D4A84B;
-  --brand-gold-dark: #B45309;
+  --brand-gold: #B5842A;
+  --brand-gold-dark: #8A6220;
 
-  --odoo-bg: #F7F9FA;
+  --odoo-bg: #F0EEEE;            /* sand-100 */
   --odoo-surface: #FFFFFF;
-  --odoo-border: #E2E8F0;
-  --odoo-border-strong: #D0D3DA;
+  --odoo-border: #E7E3E3;        /* line */
+  --odoo-border-strong: #D8D3D3;
 
-  --odoo-text: #111827;
-  --odoo-text-muted: #6B7280;
-  --odoo-text-faint: #9CA3AF;
+  --odoo-text: #2C2C2C;          /* ink-900 */
+  --odoo-text-muted: #6B6B6B;    /* ink-600 */
+  --odoo-text-faint: #9C9C9C;    /* ink-400 */
 
-  --odoo-success: #059669;
-  --odoo-warning: #B45309;
-  --odoo-danger: #DC2626;
-  --odoo-info: #17A2B8;
+  --odoo-success: #3D7A4E;
+  --odoo-warning: #B5842A;
+  --odoo-danger: #A93226;
+  --odoo-info: #008AF5;
 
   --odoo-radius: 10px;
-  --odoo-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --odoo-shadow: 0 1px 2px rgba(45,25,40,.05), 0 1px 1px rgba(45,25,40,.04);
   --odoo-topbar-h: 46px;
 }
 
@@ -35,7 +35,7 @@ html, body, #root {
 }
 
 body {
-  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: "Inter", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--odoo-bg);
   color: var(--odoo-text);
   font-size: 13px;
@@ -54,7 +54,7 @@ table {
 a { color: var(--odoo-purple); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* Shared animations — same ones the original dashboard used */
+/* Shared animations */
 @keyframes countUp {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
@@ -68,8 +68,8 @@ a:hover { text-decoration: underline; }
   to { opacity: 1; }
 }
 @keyframes pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(26,122,130,0.2); }
-  50% { box-shadow: 0 0 0 8px rgba(26,122,130,0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(113,75,103,0.2); }
+  50% { box-shadow: 0 0 0 8px rgba(113,75,103,0); }
 }
 @keyframes fadeRow {
   from { opacity: 0; transform: translateY(6px); }

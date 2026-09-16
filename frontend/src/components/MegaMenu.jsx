@@ -52,6 +52,10 @@ export const NAV_ITEMS = [
   },
 ];
 
+export const FLAT_NAV = NAV_ITEMS.flatMap((group) =>
+  group.subMenus.flatMap((sub) => sub.items)
+);
+
 export default function MegaMenu({ items = NAV_ITEMS }) {
   const [openMenu, setOpenMenu] = useState(null);
   const [isHover, setIsHover] = useState(null);
