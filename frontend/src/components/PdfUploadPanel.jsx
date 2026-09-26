@@ -38,13 +38,16 @@ export default function PdfUploadPanel({ onSearch }) {
 
   return (
     <div style={{ background: "var(--odoo-surface)", border: "1px solid var(--odoo-border)", borderRadius: "var(--odoo-radius)", padding: 16 }}>
-      <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--odoo-purple)", marginBottom: 8 }}>{t("uploadInvoicePdf")}</div>
-      <div style={{ background: "#FFFBEB", color: "#92400E", fontSize: 11.5, padding: "8px 10px", borderRadius: 6, marginBottom: 10 }}>
-        ⚠️ {t("pdfWarning")}
+      <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--odoo-heading)", marginBottom: 8 }}>{t("uploadInvoicePdf")}</div>
+      <div className="alert-item warn" style={{ marginBottom: 10 }}>
+        {t("pdfWarning")}
       </div>
 
+      <label className="dropzone" style={{ display: "block", marginBottom: 10, padding: "16px" }}>
+        <div className="dz-label">{busy ? t("parsingPdf") : (result ? result.raw_count + " codes" : "Click or drop invoice PDF")}</div>
+        <input ref={inputRef} type="file" accept=".pdf" onChange={handleFile} disabled={busy} />
+      </label>
       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10, flexWrap: "wrap" }}>
-        <input ref={inputRef} type="file" accept=".pdf" onChange={handleFile} disabled={busy} style={{ fontSize: 12 }} />
         <label style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12 }}>
           <input type="radio" name="pdfmode" checked={mode === "main"} onChange={() => setMode("main")} /> {t("mainModels")}
         </label>
@@ -84,8 +87,8 @@ export default function PdfUploadPanel({ onSearch }) {
           )}
 
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => pick("total")} style={btnStyle(true)}>{t("totalStock")}</button>
-            <button onClick={() => pick("branch")} style={btnStyle(false)}>{t("branchWise")}</button>
+            <button className="btn" style={{ flex: 1, justifyContent: "center" }} onClick={() => pick("total")}>{t("totalStock")}</button>
+            <button className="btn secondary" style={{ flex: 1, justifyContent: "center" }} onClick={() => pick("branch")}>{t("branchWise")}</button>
           </div>
         </div>
       )}
@@ -100,17 +103,4 @@ function Metric({ label, value }) {
       <div style={{ fontSize: 18, fontWeight: 700 }}>{value}</div>
     </div>
   );
-}
-
-function btnStyle(primary) {
-  return {
-    flex: 1,
-    height: 34,
-    borderRadius: 6,
-    fontSize: 12.5,
-    fontWeight: 600,
-    border: primary ? "none" : "1px solid var(--odoo-purple)",
-    background: primary ? "var(--odoo-purple)" : "#fff",
-    color: primary ? "#fff" : "var(--odoo-purple)",
-  };
 }

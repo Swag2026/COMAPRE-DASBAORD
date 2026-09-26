@@ -57,14 +57,17 @@ export default function ExcelUploadPanel({ onSearch }) {
 
   return (
     <div style={{ background: "var(--odoo-surface)", border: "1px solid var(--odoo-border)", borderRadius: "var(--odoo-radius)", padding: 16 }}>
-      <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--odoo-purple)", marginBottom: 8 }}>
-        ✅ {t("uploadExcel")}
+      <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--odoo-heading)", marginBottom: 8 }}>
+        {t("uploadExcel")}
       </div>
-      <div style={{ background: "var(--odoo-purple-pale)", color: "var(--odoo-purple)", fontSize: 11.5, padding: "8px 10px", borderRadius: 6, marginBottom: 10 }}>
+      <div className="alert-item" style={{ marginBottom: 10 }}>
         {t("excelHint")}
       </div>
 
-      <input ref={inputRef} type="file" accept=".xlsx,.xls,.csv" onChange={handleFile} disabled={busy} style={{ fontSize: 12, marginBottom: 10 }} />
+      <label className="dropzone" style={{ display: "block", marginBottom: 10, padding: "16px" }}>
+        <div className="dz-label">{busy ? t("reading") : (file ? file.name : "Click or drop Excel / CSV file")}</div>
+        <input ref={inputRef} type="file" accept=".xlsx,.xls,.csv" onChange={handleFile} disabled={busy} />
+      </label>
 
       {busy && (
         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--odoo-text-muted)" }}>
@@ -119,10 +122,10 @@ export default function ExcelUploadPanel({ onSearch }) {
                 <div style={{ fontSize: 12, color: "var(--odoo-warning)" }}>{t("noCodesColumn")}</div>
               ) : (
                 <div style={{ display: "flex", gap: 8 }}>
-                  <button onClick={() => pick("total")} style={btnStyle(true)}>
+                  <button className="btn" style={{ flex: 1, justifyContent: "center" }} onClick={() => pick("total")}>
                     {t("totalStock")} ({extracted.unique_count})
                   </button>
-                  <button onClick={() => pick("branch")} style={btnStyle(false)}>
+                  <button className="btn secondary" style={{ flex: 1, justifyContent: "center" }} onClick={() => pick("branch")}>
                     {t("branchWise")} ({extracted.unique_count})
                   </button>
                 </div>
@@ -142,17 +145,4 @@ function Metric({ label, value }) {
       <div style={{ fontSize: 18, fontWeight: 700 }}>{value}</div>
     </div>
   );
-}
-
-function btnStyle(primary) {
-  return {
-    flex: 1,
-    height: 34,
-    borderRadius: 6,
-    fontSize: 12.5,
-    fontWeight: 600,
-    border: primary ? "none" : "1px solid var(--odoo-purple)",
-    background: primary ? "var(--odoo-purple)" : "#fff",
-    color: primary ? "#fff" : "var(--odoo-purple)",
-  };
 }

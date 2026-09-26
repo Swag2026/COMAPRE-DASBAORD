@@ -108,17 +108,7 @@ export default function ReorderPage() {
       />
 
       {critical + low > 0 && (
-        <div
-          style={{
-            background: "#FDF3E3",
-            border: "1px solid #F0D8A8",
-            borderRadius: "var(--odoo-radius)",
-            padding: "8px 14px",
-            marginBottom: 14,
-            fontSize: 13,
-            color: "#8A5A17",
-          }}
-        >
+        <div className="alert-item warn" style={{ marginBottom: 14 }}>
           {critical + low} {t("needReordering")}
         </div>
       )}

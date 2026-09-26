@@ -26,21 +26,9 @@ export default function ExportButtons({ exporters }) {
       {exporters.map((exp) => (
         <button
           key={exp.key}
+          className="btn secondary small"
           onClick={() => run(exp.key, exp.fn, exp.filename)}
           disabled={busy === exp.key}
-          style={{
-            height: 32,
-            padding: "0 14px",
-            border: "1px solid var(--odoo-purple)",
-            background: busy === exp.key ? "var(--odoo-purple-pale)" : "#fff",
-            color: "var(--odoo-purple)",
-            borderRadius: 6,
-            fontSize: 12.5,
-            fontWeight: 600,
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-          }}
         >
           {busy === exp.key ? <Spinner size={13} /> : null}
           {busy === exp.key ? t("downloading") : exp.label}

@@ -1,10 +1,15 @@
 import useCountUp from "../utils/useCountUp";
 
-const TONE_COLORS = {
-  good: { bar: "#3D7A4E", bg: "#E7F2E8", fg: "#3D7A4E" },
-  warn: { bar: "#B5842A", bg: "#FBF0DB", fg: "#B5842A" },
-  bad: { bar: "#A93226", bg: "#FBE8E4", fg: "#A93226" },
-  default: { bar: "#8B5E7E", bg: "#F1E6EE", fg: "#714B67" },
+// Matches the reference's Summary & Alerts cards exactly — verified against
+// its source CSS (not just a screenshot). Each tone has THREE distinct
+// shades, not one: the badge's solid background, a near-black tinted glyph
+// color inside it, and a separately-darkened number color. Default/neutral
+// is solid black + white glyph; purple stays reserved for hero/CTA only.
+const TONE = {
+  good: { bg: "var(--odoo-success)", icon: "#12271A", num: "#146c3a" },
+  warn: { bg: "var(--odoo-warning)", icon: "#2E2308", num: "#8a5300" },
+  bad: { bg: "var(--odoo-danger)", icon: "#2E100C", num: "#a51e1e" },
+  default: { bg: "#1a1a1a", icon: "#fff", num: "var(--odoo-heading)" },
 };
 
 export default function KpiRow({ items }) {
@@ -20,7 +25,7 @@ export default function KpiRow({ items }) {
 function KpiCard({ item, delay }) {
   const animated = useCountUp(item.value);
   const display = typeof item.value === "number" && item.format ? item.format(animated) : animated;
-  const tone = TONE_COLORS[item.tone] || TONE_COLORS.default;
+  const tone = TONE[item.tone] || TONE.default;
   const Icon = item.icon;
 
   return (
@@ -28,14 +33,14 @@ function KpiCard({ item, delay }) {
       className={`kpi-card ${item.tone || ""}`}
       style={{ animationDelay: `${delay}s` }}
     >
-      <span className="kpi-accent" style={{ background: tone.bar }} />
+      <span className="kpi-accent" style={{ background: tone.bg }} />
       {Icon && (
-        <span className="kpi-icon" style={{ background: tone.bg, color: tone.fg }}>
+        <span className="kpi-icon" style={{ background: tone.bg, color: tone.icon }}>
           <Icon size={19} />
         </span>
       )}
       <div className="kpi-info">
-        <div className="num" style={{ color: item.color || undefined }}>
+        <div className="num" style={{ color: item.color || tone.num }}>
           {display}
         </div>
         <div className="label">{item.label}</div>

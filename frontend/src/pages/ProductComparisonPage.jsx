@@ -179,7 +179,8 @@ export default function ProductComparisonPage() {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
-        <button onClick={() => runCompare()} disabled={loading} style={compareBtnStyle}>
+        <button className="btn" onClick={() => runCompare()} disabled={loading} style={{ padding: "0 24px", height: 40, fontSize: 13.5 }}>
+
           {loading ? (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               <Spinner size={15} color="#fff" /> {t("comparing")}
@@ -226,20 +227,12 @@ export default function ProductComparisonPage() {
       {compared && (
         <>
           {lowStockItems.length > 0 && (
-            <div
-              style={{
-                background: "#FFFBEB",
-                border: "1px solid #F0D8A8",
-                borderRadius: "var(--odoo-radius)",
-                padding: "10px 16px",
-                marginBottom: 14,
-              }}
-            >
-              <div style={{ fontWeight: 700, fontSize: 13, color: "#92400E", marginBottom: 4 }}>
+            <div className="alert-item warn" style={{ flexDirection: "column", alignItems: "stretch", marginBottom: 14 }}>
+              <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4 }}>
                 {t("lowStockAlert")} — {lowStockItems.length} {t("items")} ≤ {lowStockThreshold}
               </div>
               {lowStockItems.slice(0, 5).map((r) => (
-                <div key={r.system_name + r.model_code} style={{ fontSize: 12, color: "#92400E" }}>
+                <div key={r.system_name + r.model_code} style={{ fontSize: 12, fontWeight: 500 }}>
                   {r.model_code} {t("at")} {r.system_name} ({r.on_hand})
                 </div>
               ))}
@@ -263,12 +256,13 @@ export default function ProductComparisonPage() {
           <div
             style={{
               display: "inline-flex",
-              gap: 4,
-              padding: 4,
+              gap: 0,
+              padding: 5,
               marginBottom: 16,
               background: "var(--odoo-bg)",
               border: "1px solid var(--odoo-border)",
-              borderRadius: 10,
+              borderRadius: 13,
+              boxShadow: "inset 0 1px 3px rgba(0,0,0,.05)",
             }}
           >
             {[
@@ -279,10 +273,10 @@ export default function ProductComparisonPage() {
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 style={{
-                  padding: "8px 18px",
-                  fontSize: 13,
+                  padding: "10px 18px",
+                  fontSize: 12.5,
                   fontWeight: 700,
-                  borderRadius: 7,
+                  borderRadius: 10,
                   border: "none",
                   cursor: "pointer",
                   background: activeTab === tab.key ? "#1a1a1a" : "transparent",
@@ -556,12 +550,3 @@ function BranchPicker({ options, selected, onChange }) {
   );
 }
 
-const compareBtnStyle = {
-  background: "var(--odoo-purple)",
-  color: "#fff",
-  border: "none",
-  borderRadius: 8,
-  padding: "11px 28px",
-  fontSize: 13.5,
-  fontWeight: 700,
-};

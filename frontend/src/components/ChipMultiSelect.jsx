@@ -13,12 +13,15 @@ export default function ChipMultiSelect({ options, selected, onChange, placehold
           flexWrap: "wrap",
           gap: 6,
           border: "1px solid var(--odoo-border-strong)",
-          borderRadius: 8,
+          borderRadius: 9,
           padding: 6,
           minHeight: 38,
           cursor: "pointer",
           background: "#fff",
+          transition: "border-color .18s ease",
         }}
+        onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--odoo-accent)")}
+        onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--odoo-border-strong)")}
       >
         {selected.map((s) => (
           <span
@@ -27,10 +30,10 @@ export default function ChipMultiSelect({ options, selected, onChange, placehold
               display: "flex",
               alignItems: "center",
               gap: 5,
-              background: "var(--odoo-purple-pale)",
-              color: "var(--odoo-purple)",
-              borderRadius: 6,
-              padding: "3px 8px",
+              background: "var(--odoo-accent)",
+              color: "#fff",
+              borderRadius: 999,
+              padding: "3px 10px",
               fontSize: 12,
               fontWeight: 600,
             }}
@@ -70,12 +73,13 @@ export default function ChipMultiSelect({ options, selected, onChange, placehold
             left: 0,
             right: 0,
             background: "#fff",
-            border: "1px solid var(--odoo-border-strong)",
-            borderRadius: 8,
-            marginTop: 4,
+            border: "1px solid var(--odoo-border)",
+            borderRadius: 11,
+            marginTop: 6,
             maxHeight: 160,
             overflowY: "auto",
-            boxShadow: "0 6px 20px rgba(0,0,0,0.12)",
+            boxShadow: "var(--odoo-shadow-lg)",
+            padding: 4,
           }}
         >
           {available.map((o) => (
@@ -84,8 +88,8 @@ export default function ChipMultiSelect({ options, selected, onChange, placehold
               onClick={() => {
                 onChange([...selected, o]);
               }}
-              style={{ padding: "8px 12px", fontSize: 12.5, cursor: "pointer" }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--odoo-purple-pale)")}
+              style={{ padding: "8px 10px", fontSize: 12.5, cursor: "pointer", borderRadius: 7 }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--odoo-bg)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >
               {o}
