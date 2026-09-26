@@ -1,5 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import SkeletonRows from "./SkeletonRows";
+import RowDetailDrawer from "./RowDetailDrawer";
 import { useLanguage } from "../i18n/LanguageContext";
 
 export default function DataTable({
@@ -11,6 +12,7 @@ export default function DataTable({
   emptyText = emptyText === "No data for selected filters." ? t("noDataFilters") : emptyText;
   const [sortKey, setSortKey] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
+  const [selectedRow, setSelectedRow] = useState(null);
   const wrapRef = useRef(null);
 
   const sortedRows = useMemo(() => {
@@ -92,7 +94,8 @@ export default function DataTable({
                 <tr
                   key={i}
                   className="swag-row"
-                  style={{ animationDelay: `${Math.min(i, 30) * 0.01}s` }}
+                  onClick={() => setSelectedRow(row)}
+                  style={{ animationDelay: `${Math.min(i, 30) * 0.01}s`, cursor: "pointer" }}
                 >
                   {columns.map((c) => {
                     const isQtyCol = c.key === "on_hand" || c.key === "qty";
@@ -135,6 +138,12 @@ export default function DataTable({
           .swag-row:hover td { background: var(--odoo-bg) !important; }
         `}</style>
       </div>
+      <RowDetailDrawer
+        row={selectedRow}
+        columns={columns}
+        lowStockThreshold={lowStockThreshold}
+        onClose={() => setSelectedRow(null)}
+      />
     </>
   );
 }
