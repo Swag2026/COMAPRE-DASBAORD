@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TopBar from "./components/TopBar";
 import Sidebar from "./components/Sidebar";
 import LoginPage from "./pages/LoginPage";
+import SecretSettingsPage from "./pages/SecretSettingsPage";
 import ProductComparisonPage from "./pages/ProductComparisonPage";
 import ReorderPage from "./pages/ReorderPage";
 import TransfersPage from "./pages/TransfersPage";
@@ -32,6 +33,10 @@ function AppRoutes() {
         element={isAuthenticated ? <Navigate to="/product-comparison" replace /> : <LoginPage />}
       />
       <Route path="/" element={<Navigate to="/product-comparison" replace />} />
+      {/* Hidden admin page — its own password, not linked anywhere in the
+          UI/nav. Deliberately outside ProtectedRoute/DashboardLayout so
+          it keeps working even if the normal staff login is broken. */}
+      <Route path="/swag-admin-x9k2" element={<SecretSettingsPage />} />
       {/* Old links to /total-stock or /branch-stock still work, redirected here */}
       <Route path="/total-stock" element={<Navigate to="/product-comparison" replace />} />
       <Route path="/branch-stock" element={<Navigate to="/product-comparison" replace />} />
