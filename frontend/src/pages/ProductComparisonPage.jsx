@@ -175,7 +175,7 @@ export default function ProductComparisonPage() {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
-        <button onClick={() => runCompare()} disabled={loading} style={compareBtnStyle}>
+        <button onClick={() => runCompare()} disabled={loading} className="btn-primary" style={compareBtnStyle}>
           {loading ? (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
               <Spinner size={15} color="#fff" /> Comparing…
@@ -533,12 +533,6 @@ function BranchPicker({ options, selected, onChange }) {
   );
 }
 
-const compareBtnStyle = {
-  background: "var(--odoo-purple)",
-  color: "#fff",
-  border: "none",
-  borderRadius: 8,
-  padding: "11px 28px",
-  fontSize: 13.5,
-  fontWeight: 700,
-};
+// Visual styling now lives in the shared .btn-primary CSS class (gradient,
+// hover lift, active scale — matches the reference app's .btn exactly).
+const compareBtnStyle = {};

@@ -139,12 +139,13 @@ export default function Sidebar() {
             onChange={(e) => setLowStockThreshold(Number(e.target.value) || 0)}
             style={{ width: 60, height: 28, padding: "0 8px", border: "1px solid var(--odoo-border-strong)", borderRadius: 6, fontSize: 12.5 }}
           />
-          <button onClick={handleReload} disabled={reloading} style={reloadBtnStyle}>
+          <button onClick={handleReload} disabled={reloading} className="icon-btn" style={reloadBtnStyle}>
             {reloading ? <Spinner size={12} /> : <span className="rtl-flip">⟳</span>}
           </button>
           <button
             onClick={toggleLanguage}
             title={lang === "en" ? "العربية" : "English"}
+            className="icon-btn"
             style={reloadBtnStyle}
           >
             <Languages size={13} />
@@ -175,9 +176,6 @@ function SnapRow({ label, value }) {
 
 const reloadBtnStyle = {
   width: 28, height: 28, borderRadius: 6,
-  border: "1px solid var(--odoo-border-strong)",
-  background: "#fff",
-  color: "var(--odoo-purple)",
   display: "flex", alignItems: "center", justifyContent: "center",
   fontSize: 13,
 };

@@ -22,7 +22,7 @@ export default function TopBar() {
       }}
     >
       <div style={{ flex: 1 }}>
-        <h1 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: "var(--odoo-text)" }}>
+        <h1 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: "var(--odoo-heading)" }}>
           {t("topBarTitle")}
         </h1>
         <p style={{ margin: "3px 0 0", fontSize: 12, color: "var(--odoo-purple)", fontWeight: 600 }}>
@@ -42,13 +42,11 @@ function IconBtn({ children, title, danger, onClick }) {
     <button
       title={title}
       onClick={onClick}
+      className={`icon-btn${danger ? " danger" : ""}`}
       style={{
         width: 36,
         height: 36,
         borderRadius: 9,
-        border: "1px solid var(--odoo-border)",
-        background: "var(--odoo-bg)",
-        color: danger ? "var(--odoo-danger)" : "var(--odoo-text-muted)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

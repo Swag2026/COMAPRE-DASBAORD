@@ -26,12 +26,11 @@ export default function ExportButtons({ exporters }) {
           key={exp.key}
           onClick={() => run(exp.key, exp.fn, exp.filename)}
           disabled={busy === exp.key}
+          className="btn-secondary"
           style={{
             height: 32,
             padding: "0 14px",
-            border: "1px solid var(--odoo-purple)",
-            background: busy === exp.key ? "var(--odoo-purple-pale)" : "#fff",
-            color: "var(--odoo-purple)",
+            background: busy === exp.key ? "var(--odoo-purple-pale)" : undefined,
             borderRadius: 6,
             fontSize: 12.5,
             fontWeight: 600,
