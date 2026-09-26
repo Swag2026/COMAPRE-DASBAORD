@@ -49,6 +49,7 @@ function localizedColumns(columns, t) {
 }
 
 export default function ProductComparisonPage() {
+  const { t } = useLanguage();
   const { reloadKey, lowStockThreshold, exactMatch, setLastRun } = useAppState();
 
   const [allSystems, setAllSystems] = useState([]); // [{key,name}]
@@ -83,12 +84,12 @@ export default function ProductComparisonPage() {
     const codesToUse = overrideSearch !== undefined ? overrideSearch : search;
     setLoading(true);
     try {
-      const [t, b] = await Promise.all([
+      const [totalRes, branchRes] = await Promise.all([
         getTotalStock({ codes: codesToUse, exact: exactMatch }),
         getBranchStock({ codes: codesToUse, exact: exactMatch }),
       ]);
-      setTotalRows(t.rows);
-      setBranchRows(b.rows);
+      setTotalRows(totalRes.rows);
+      setBranchRows(branchRes.rows);
       setLastRun(new Date().toLocaleTimeString());
       showToast(t("comparisonUpdated"), "success");
     } catch {
@@ -127,7 +128,6 @@ export default function ProductComparisonPage() {
   const lowStockItems = ok.filter((r) => r.on_hand > 0 && r.on_hand <= lowStockThreshold);
 
   const compared = totalRows !== null;
-  const { t } = useLanguage();
 
   return (
     <div style={{ padding: "18px 24px" }}>
