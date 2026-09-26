@@ -4,12 +4,14 @@ import { translations } from "./translations";
 const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(() => localStorage.getItem("swag_lang") || "en");
+  const [lang, setLang] = useState(() => localStorage.getItem("swag_lang") || "ar");
 
   useEffect(() => {
     localStorage.setItem("swag_lang", lang);
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.documentElement.classList.remove("preload");
+    document.documentElement.style.opacity = "1";
   }, [lang]);
 
   function t(key) {

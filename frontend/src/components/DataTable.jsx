@@ -1,12 +1,15 @@
 import { useMemo, useRef, useState } from "react";
 import SkeletonRows from "./SkeletonRows";
 import RowDetailDrawer from "./RowDetailDrawer";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function DataTable({
   columns, rows, loading,
   emptyText = "No data for selected filters.",
   lowStockThreshold = 0,
 }) {
+  const { t } = useLanguage();
+  emptyText = emptyText === "No data for selected filters." ? t("noDataFilters") : emptyText;
   const [sortKey, setSortKey] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
   const [selectedRow, setSelectedRow] = useState(null);
@@ -62,20 +65,8 @@ export default function DataTable({
 
   return (
     <>
-      <div
-        ref={wrapRef}
-        className="swag-table-wrap"
-        style={{
-          position: "relative",
-          background: "var(--odoo-surface)",
-          border: "1px solid var(--odoo-border)",
-          borderRadius: "var(--odoo-radius)",
-          overflow: "auto",
-          maxHeight: 560,
-          boxShadow: "inset 14px 0 10px -10px rgba(45,25,40,.14), inset -14px 0 10px -10px rgba(45,25,40,.14)",
-        }}
-      >
-        <table style={{ "--table-line": "#E3DDDD" }}>
+      <div ref={wrapRef} className="table-wrap swag-table-wrap">
+        <table>
           <thead>
             <tr>
               {columns.map((c) => {
@@ -84,24 +75,11 @@ export default function DataTable({
                   <th
                     key={c.key}
                     onClick={() => toggleSort(c.key)}
-                    style={{
-                      position: "sticky",
-                      top: 0,
-                      background: "linear-gradient(180deg, #FBFBFB, #F0EEEE)",
-                      color: "var(--odoo-text)",
-                      textAlign: "center",
-                      padding: "10px 12px",
-                      fontSize: 11.5,
-                      fontWeight: 700,
-                      whiteSpace: "nowrap",
-                      cursor: "pointer",
-                      userSelect: "none",
-                      borderBottom: "1.5px solid #C7C1C1",
-                    }}
+                    className={`sortable${isSorted ? " sort-active" : ""}`}
                     title="Click to sort"
                   >
                     {c.label}
-                    {isSorted && <span style={{ marginLeft: 5, fontSize: 10, opacity: 0.7 }}>{sortDir === "asc" ? "▲" : "▼"}</span>}
+                    <span className="sort-arrow">{isSorted ? (sortDir === "asc" ? "▲" : "▼") : "↕"}</span>
                   </th>
                 );
               })}
@@ -117,31 +95,14 @@ export default function DataTable({
                   key={i}
                   className="swag-row"
                   onClick={() => setSelectedRow(row)}
-                  style={{
-                    background: isLow ? "var(--brand-gold-bg, #FBF0DB)" : "transparent",
-                    borderBottom: "1px solid #E3DDDD",
-                    animation: "fadeRow 0.25s ease both",
-                    animationDelay: `${Math.min(i, 30) * 0.01}s`,
-                    cursor: "pointer",
-                  }}
+                  style={{ animationDelay: `${Math.min(i, 30) * 0.01}s` }}
                 >
                   {columns.map((c) => {
                     const isQtyCol = c.key === "on_hand" || c.key === "qty";
                     return (
                       <td
                         key={c.key}
-                        style={{
-                          padding: "8px 12px",
-                          textAlign: c.align === "right" ? "right" : "center",
-                          color: isLow
-                            ? "#8A5A17"
-                            : isQtyCol && isZero
-                            ? "var(--odoo-danger)"
-                            : "var(--odoo-text)",
-                          fontWeight: isQtyCol ? 700 : 500,
-                          fontSize: 13,
-                          whiteSpace: "nowrap",
-                        }}
+                        className={c.align === "right" ? "right" : ""}
                       >
                         {isQtyCol ? (
                           <span
@@ -174,12 +135,7 @@ export default function DataTable({
           </tbody>
         </table>
         <style>{`
-          .swag-table-wrap table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
-          .swag-row:hover td { background: #F0EEEE !important; }
-          .swag-table-wrap::-webkit-scrollbar { width: 9px; height: 9px; }
-          .swag-table-wrap::-webkit-scrollbar-track { background: transparent; }
-          .swag-table-wrap::-webkit-scrollbar-thumb { background: var(--odoo-border); border-radius: 99px; }
-          .swag-table-wrap::-webkit-scrollbar-thumb:hover { background: var(--odoo-purple-light); }
+          .swag-row:hover td { background: var(--odoo-bg) !important; }
         `}</style>
       </div>
 

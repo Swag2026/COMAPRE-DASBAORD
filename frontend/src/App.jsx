@@ -15,11 +15,11 @@ import ComingSoonPage from "./pages/ComingSoonPage";
 
 function DashboardLayout({ children }) {
   return (
-    <div style={{ display: "flex" }}>
+    <div className="shell">
       <Sidebar />
-      <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+      <div className="main">
         <TopBar />
-        {children}
+        <main className="content">{children}</main>
       </div>
     </div>
   );

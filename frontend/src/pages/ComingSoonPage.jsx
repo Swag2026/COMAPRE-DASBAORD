@@ -1,9 +1,11 @@
 import HeroHeader from "../components/HeroHeader";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function ComingSoonPage({ title }) {
+  const { t } = useLanguage();
   return (
     <div style={{ padding: "18px 24px" }}>
-      <HeroHeader title={title} subtitle="SWAG Dashboard · Coming Soon" />
+      <HeroHeader title={title === "Season Comparison" ? t("navSeasonComparison") : title} subtitle={`${t("brandName")} · ${t("comingSoon")}`} />
       <div
         style={{
           background: "var(--odoo-surface)",
@@ -18,7 +20,7 @@ export default function ComingSoonPage({ title }) {
           <circle cx="28" cy="28" r="20" stroke="var(--odoo-border-strong)" strokeWidth="1.5" />
           <path d="M28 18 L28 28 L35 33" stroke="var(--odoo-border-strong)" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
-        <div>This page is under construction — available soon.</div>
+        <div>{t("underConstruction")}</div>
       </div>
     </div>
   );

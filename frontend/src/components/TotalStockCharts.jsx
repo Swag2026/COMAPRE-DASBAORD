@@ -1,8 +1,10 @@
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const PALETTE = ["#1A7A82", "#D4A84B", "#059669", "#7C3AED", "#DC2626", "#0EA5E9", "#F97316", "#DB2777"];
 
 export function ValueBySystemChart({ rows }) {
+  const { t } = useLanguage();
   const ok = rows.filter((r) => r.status === "OK");
   const byS = {};
   const qtyS = {};
@@ -22,7 +24,7 @@ export function ValueBySystemChart({ rows }) {
         <BarChart data={data} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
           <XAxis type="number" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
           <YAxis type="category" dataKey="system_name" tick={{ fontSize: 11 }} width={130} axisLine={false} tickLine={false} />
-          <Tooltip content={<RichTooltip unit="SAR" extraKey="qty" extraLabel="Total Qty" />} cursor={{ fill: "rgba(26,122,130,0.06)" }} />
+          <Tooltip content={<RichTooltip unit="SAR" extraKey="qty" extraLabel={t("totalQty")} />} cursor={{ fill: "rgba(26,122,130,0.06)" }} />
           <Bar dataKey="value" radius={[0, 8, 8, 0]} animationDuration={900} animationEasing="ease-out">
             {data.map((d, i) => (
               <Cell key={d.system_name} fill={PALETTE[i % PALETTE.length]} />
@@ -35,6 +37,7 @@ export function ValueBySystemChart({ rows }) {
 }
 
 export function Top10ValueChart({ rows }) {
+  const { t } = useLanguage();
   const ok = rows.filter((r) => r.status === "OK");
   const data = ok
     .map((r) => ({ label: r.model_code, value: Math.round(r.sale_price * r.on_hand), qty: r.on_hand, system: r.system_name }))
@@ -49,7 +52,7 @@ export function Top10ValueChart({ rows }) {
         <BarChart data={data} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
           <XAxis type="number" tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
           <YAxis type="category" dataKey="label" tick={{ fontSize: 11 }} width={90} axisLine={false} tickLine={false} />
-          <Tooltip content={<RichTooltip unit="SAR" extraKey="qty" extraLabel="On Hand" systemKey="system" />} cursor={{ fill: "rgba(212,168,75,0.08)" }} />
+          <Tooltip content={<RichTooltip unit="SAR" extraKey="qty" extraLabel={t("onHand")} systemKey="system" />} cursor={{ fill: "rgba(212,168,75,0.08)" }} />
           <Bar dataKey="value" radius={[0, 8, 8, 0]} animationDuration={900} animationEasing="ease-out">
             {data.map((d, i) => (
               <Cell key={d.label} fill={PALETTE[i % PALETTE.length]} />
@@ -62,6 +65,7 @@ export function Top10ValueChart({ rows }) {
 }
 
 function RichTooltip({ active, payload, unit, extraKey, extraLabel, systemKey }) {
+  const { t } = useLanguage();
   if (!active || !payload || !payload.length) return null;
   const d = payload[0].payload;
   return (
@@ -83,7 +87,7 @@ function RichTooltip({ active, payload, unit, extraKey, extraLabel, systemKey })
         <div style={{ color: "var(--odoo-text-muted)", marginBottom: 4 }}>{d[systemKey]}</div>
       )}
       <div style={{ color: "var(--odoo-text)" }}>
-        Value: <b>{d.value.toLocaleString()} {unit}</b>
+        {t("value")}: <b>{d.value.toLocaleString()} {unit}</b>
       </div>
       {extraKey && (
         <div style={{ color: "var(--odoo-text-muted)" }}>
@@ -98,9 +102,10 @@ function RichTooltip({ active, payload, unit, extraKey, extraLabel, systemKey })
 }
 
 function EmptyChart() {
+  const { t } = useLanguage();
   return (
     <div style={{ padding: 24, textAlign: "center", color: "var(--odoo-text-muted)", fontSize: 12.5 }}>
-      No data for this chart.
+    {t("noChartData")}
     </div>
   );
 }

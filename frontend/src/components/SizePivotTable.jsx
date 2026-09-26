@@ -1,3 +1,5 @@
+import { useLanguage } from "../i18n/LanguageContext";
+
 const SIZE_ORDER = ["2XS", "XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL", "4XL", "5XL", "OSFA"];
 const SIZE_RE = /-?(2XS|XS|S|M|L|XL|XXL|2XL|3XL|4XL|5XL|OSFA|OS)$/i;
 
@@ -49,11 +51,11 @@ export function buildSizePivot(rows) {
 }
 
 export default function SizePivotTable({ pivot, threshold = 0 }) {
+  const { t } = useLanguage();
   if (!pivot || pivot.rows.length === 0) {
     return (
       <div style={{ padding: 24, textAlign: "center", color: "var(--odoo-text-muted)", fontSize: 12.5 }}>
-        No size suffixes found in model codes (e.g. XP6013-M). Size View works when model codes end with
-        -S/-M/-L/-XL/-XXL etc.
+        {t("sizeViewHint")}
       </div>
     );
   }
@@ -64,7 +66,7 @@ export default function SizePivotTable({ pivot, threshold = 0 }) {
       <table>
         <thead>
           <tr>
-            {["System", "Base Model", "Unit Price", ...sizeCols, "Total"].map((h) => (
+            {[t("system"), t("modelCode"), t("salePrice"), ...sizeCols, t("total")].map((h) => (
               <th
                 key={h}
                 style={{

@@ -2,8 +2,10 @@ import { useState } from "react";
 import { downloadFile } from "../utils/download";
 import { useToast } from "../api/ToastContext";
 import Spinner from "./Spinner";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function ExportButtons({ exporters }) {
+  const { t } = useLanguage();
   const [busy, setBusy] = useState(null);
   const { showToast } = useToast();
 
@@ -13,7 +15,7 @@ export default function ExportButtons({ exporters }) {
       await downloadFile(fn(), fallbackName);
       showToast(`${fallbackName} downloaded.`, "success");
     } catch (e) {
-      showToast("Download failed, please try again.", "error");
+      showToast(t("downloadFailed"), "error");
     } finally {
       setBusy(null);
     }
@@ -26,11 +28,12 @@ export default function ExportButtons({ exporters }) {
           key={exp.key}
           onClick={() => run(exp.key, exp.fn, exp.filename)}
           disabled={busy === exp.key}
-          className="btn-secondary"
           style={{
             height: 32,
             padding: "0 14px",
-            background: busy === exp.key ? "var(--odoo-purple-pale)" : undefined,
+            border: "1px solid var(--odoo-purple)",
+            background: busy === exp.key ? "var(--odoo-purple-pale)" : "#fff",
+            color: "var(--odoo-purple)",
             borderRadius: 6,
             fontSize: 12.5,
             fontWeight: 600,
@@ -40,7 +43,7 @@ export default function ExportButtons({ exporters }) {
           }}
         >
           {busy === exp.key ? <Spinner size={13} /> : null}
-          {busy === exp.key ? "Downloading…" : exp.label}
+          {busy === exp.key ? t("downloading") : exp.label}
         </button>
       ))}
     </div>

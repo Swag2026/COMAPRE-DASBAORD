@@ -9,14 +9,7 @@ const TONE_COLORS = {
 
 export default function KpiRow({ items }) {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(auto-fit, minmax(215px, 1fr))`,
-        gap: 14,
-        marginBottom: 20,
-      }}
-    >
+    <div className="kpi-grid">
       {items.map((it, i) => (
         <KpiCard key={it.label} item={it} delay={i * 0.06} />
       ))}
@@ -32,48 +25,21 @@ function KpiCard({ item, delay }) {
 
   return (
     <div
-      className="kpi-card"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 13,
-        background: "var(--odoo-surface)",
-        border: "1px solid var(--odoo-border)",
-        borderRadius: "var(--odoo-radius)",
-        padding: "15px 16px",
-        boxShadow: "var(--odoo-shadow)",
-        position: "relative",
-        overflow: "hidden",
-        animation: "countUp 0.5s ease both",
-        animationDelay: `${delay}s`,
-        transition: "transform 0.2s, box-shadow 0.2s, border-color 0.2s",
-      }}
+      className={`kpi-card ${item.tone || ""}`}
+      style={{ animationDelay: `${delay}s` }}
     >
-      <span style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: tone.bar, opacity: 0.7 }} />
+      <span className="kpi-accent" style={{ background: tone.bar }} />
       {Icon && (
-        <span
-          style={{
-            width: 42, height: 42, borderRadius: 11, flexShrink: 0,
-            background: tone.bg, color: tone.fg,
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}
-        >
+        <span className="kpi-icon" style={{ background: tone.bg, color: tone.fg }}>
           <Icon size={19} />
         </span>
       )}
-      <div>
-        <div style={{ fontSize: 20, fontWeight: 800, color: item.color || "var(--odoo-heading)", lineHeight: 1.15 }}>
+      <div className="kpi-info">
+        <div className="num" style={{ color: item.color || undefined }}>
           {display}
         </div>
-        <div style={{ fontSize: 12, color: "var(--odoo-text-muted)", marginTop: 2 }}>{item.label}</div>
+        <div className="label">{item.label}</div>
       </div>
-      <style>{`
-        .kpi-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 2px 6px rgba(45,25,40,.08), 0 8px 20px rgba(45,25,40,.08);
-          border-color: var(--odoo-purple-light);
-        }
-      `}</style>
     </div>
   );
 }

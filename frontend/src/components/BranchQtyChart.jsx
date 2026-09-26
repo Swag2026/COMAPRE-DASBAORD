@@ -1,4 +1,5 @@
 import { Bar, BarChart, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const SYSTEM_COLORS = {
   SWAG: "#1A7A82",
@@ -10,6 +11,7 @@ const SYSTEM_COLORS = {
 const FALLBACK_COLORS = ["#875A7B", "#4B2C43", "#0EA5E9", "#F97316", "#DB2777"];
 
 export default function BranchQtyChart({ rows }) {
+  const { t } = useLanguage();
   const okRows = rows.filter((r) => r.status === "OK");
   const systems = [...new Set(okRows.map((r) => r.system_name))].sort();
 
@@ -30,7 +32,7 @@ export default function BranchQtyChart({ rows }) {
   if (data.length === 0) {
     return (
       <div style={{ padding: 24, textAlign: "center", color: "var(--odoo-text-muted)", fontSize: 12.5 }}>
-        No data for this chart.
+        {t("noChartData")}
       </div>
     );
   }
@@ -71,6 +73,7 @@ export default function BranchQtyChart({ rows }) {
 }
 
 function BranchTooltip({ active, payload, label }) {
+  const { t } = useLanguage();
   if (!active || !payload || !payload.length) return null;
   const total = payload.reduce((s, p) => s + (p.value || 0), 0);
   const models = payload[0]?.payload?._models || 0;
@@ -95,7 +98,7 @@ function BranchTooltip({ active, payload, label }) {
         </div>
       ))}
       <div style={{ marginTop: 6, paddingTop: 6, borderTop: "1px solid #F3F4F6", color: "var(--odoo-text-muted)" }}>
-        Total: <b style={{ color: "var(--odoo-text)" }}>{total}</b> · Models in stock: <b style={{ color: "var(--odoo-text)" }}>{models}</b>
+        {t("total")}: <b style={{ color: "var(--odoo-text)" }}>{total}</b> · {t("modelsInStock")}: <b style={{ color: "var(--odoo-text)" }}>{models}</b>
       </div>
       <style>{`
         @keyframes branchTooltipPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }

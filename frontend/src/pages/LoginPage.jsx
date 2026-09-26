@@ -33,6 +33,7 @@ export default function LoginPage() {
 
   return (
     <div
+      className="login-shell"
       style={{
         minHeight: "100vh",
         position: "relative",
@@ -173,7 +174,7 @@ export default function LoginPage() {
         </button>
 
         <div style={{ textAlign: "center", marginTop: 12, fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: "#6B7280" }}>
-          SWAG Dashboard · 2026 · Powered by Odoo
+          {t("loginFooter")}
         </div>
       </div>
 

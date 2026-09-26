@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import DonutChart from "./DonutChart";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const PALETTE = ["#1A7A82", "#D4A84B", "#059669", "#7C3AED", "#DC2626", "#0EA5E9"];
 
 export default function StockValueDonutCard({ rows, title = "Stock Split by System" }) {
+  const { t } = useLanguage();
   const [hoveredLabel, setHoveredLabel] = useState(null);
 
   const ok = rows.filter((r) => r.status === "OK");
@@ -19,13 +21,13 @@ export default function StockValueDonutCard({ rows, title = "Stock Split by Syst
   const total = data.reduce((s, d) => s + d.value, 0);
   const active = data.find((d) => d.label === hoveredLabel);
   const displayValue = active?.value ?? total;
-  const displayLabel = active?.label ?? "Total Value";
+  const displayLabel = active?.label ?? t("totalValue");
   const displayPct = active ? (active.value / total) * 100 : 100;
 
   if (data.length === 0) {
     return (
       <div style={{ padding: 24, textAlign: "center", color: "var(--odoo-text-muted)", fontSize: 12.5 }}>
-        No data for this chart.
+        {t("noChartData")}
       </div>
     );
   }

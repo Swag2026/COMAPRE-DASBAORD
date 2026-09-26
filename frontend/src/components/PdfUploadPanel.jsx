@@ -2,8 +2,10 @@ import { useRef, useState } from "react";
 import { uploadPdf } from "../api/client";
 import { useToast } from "../api/ToastContext";
 import Spinner from "./Spinner";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function PdfUploadPanel({ onSearch }) {
+  const { t } = useLanguage();
   const inputRef = useRef(null);
   const [mode, setMode] = useState("main");
   const [busy, setBusy] = useState(false);
@@ -21,7 +23,7 @@ export default function PdfUploadPanel({ onSearch }) {
       setResult(data);
     } catch (err) {
       showToast(
-        err?.response?.status === 422 ? "No model codes found in the PDF." : "Error reading the PDF.",
+        err?.response?.status === 422 ? t("noPdfCodes") : t("errorPdf"),
         "error"
       );
     } finally {
@@ -31,44 +33,44 @@ export default function PdfUploadPanel({ onSearch }) {
 
   function pick(tab) {
     onSearch(result.codes.join(","), tab);
-    showToast(`Searching ${result.codes.length} codes in ${tab === "total" ? "Total Stock" : "Branch Stock"}.`, "success");
+    showToast(`${result.codes.length} ${t("codesFound")} ${tab === "total" ? t("totalStock") : t("branchStock")}.`, "success");
   }
 
   return (
     <div style={{ background: "var(--odoo-surface)", border: "1px solid var(--odoo-border)", borderRadius: "var(--odoo-radius)", padding: 16 }}>
-      <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--odoo-purple)", marginBottom: 8 }}>Upload Invoice PDF</div>
+      <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--odoo-purple)", marginBottom: 8 }}>{t("uploadInvoicePdf")}</div>
       <div style={{ background: "#FFFBEB", color: "#92400E", fontSize: 11.5, padding: "8px 10px", borderRadius: 6, marginBottom: 10 }}>
-        ⚠️ PDF extraction may miss codes with unusual formatting — use Excel upload for 100% exact match
+        ⚠️ {t("pdfWarning")}
       </div>
 
       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 10, flexWrap: "wrap" }}>
         <input ref={inputRef} type="file" accept=".pdf" onChange={handleFile} disabled={busy} style={{ fontSize: 12 }} />
         <label style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12 }}>
-          <input type="radio" name="pdfmode" checked={mode === "main"} onChange={() => setMode("main")} /> Main models
+          <input type="radio" name="pdfmode" checked={mode === "main"} onChange={() => setMode("main")} /> {t("mainModels")}
         </label>
         <label style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12 }}>
-          <input type="radio" name="pdfmode" checked={mode === "sizes"} onChange={() => setMode("sizes")} /> With sizes
+          <input type="radio" name="pdfmode" checked={mode === "sizes"} onChange={() => setMode("sizes")} /> {t("withSizes")}
         </label>
       </div>
 
       {busy && (
         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--odoo-text-muted)" }}>
-          <Spinner size={14} /> Parsing PDF…
+          <Spinner size={14} /> {t("parsingPdf")}
         </div>
       )}
 
       {result && (
         <div style={{ marginTop: 6 }}>
           <div style={{ display: "flex", gap: 20, marginBottom: 10 }}>
-            <Metric label="Raw codes" value={result.raw_count} />
-            <Metric label="Unique models" value={result.unique_count} />
+            <Metric label={t("rawCodes")} value={result.raw_count} />
+            <Metric label={t("uniqueModels")} value={result.unique_count} />
           </div>
 
           <button
             onClick={() => setExpanded((x) => !x)}
             style={{ background: "none", border: "none", color: "var(--odoo-purple)", fontSize: 12, fontWeight: 600, padding: 0, marginBottom: 8 }}
           >
-            {expanded ? "▾" : "▸"} {result.unique_count} codes found
+            {expanded ? "▾" : "▸"} {result.unique_count} {t("codesFound")}
           </button>
           {expanded && (
             <pre
@@ -82,8 +84,8 @@ export default function PdfUploadPanel({ onSearch }) {
           )}
 
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => pick("total")} style={btnStyle(true)}>Total Stock</button>
-            <button onClick={() => pick("branch")} style={btnStyle(false)}>Branch-wise</button>
+            <button onClick={() => pick("total")} style={btnStyle(true)}>{t("totalStock")}</button>
+            <button onClick={() => pick("branch")} style={btnStyle(false)}>{t("branchWise")}</button>
           </div>
         </div>
       )}

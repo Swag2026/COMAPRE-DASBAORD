@@ -1,4 +1,7 @@
+import { useLanguage } from "../i18n/LanguageContext";
+
 export default function RowDetailDrawer({ row, columns, onClose }) {
+  const { t } = useLanguage();
   if (!row) return null;
   return (
     <>
@@ -23,7 +26,7 @@ export default function RowDetailDrawer({ row, columns, onClose }) {
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18 }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: "var(--odoo-purple)" }}>Details</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: "var(--odoo-purple)" }}>{t("details")}</div>
           <button
             onClick={onClose}
             style={{ border: "none", background: "none", fontSize: 20, cursor: "pointer", color: "var(--odoo-text-muted)", lineHeight: 1 }}

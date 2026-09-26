@@ -7,20 +7,23 @@ import KpiRow from "../components/KpiRow";
 import ExportButtons from "../components/ExportButtons";
 import HeroHeader from "../components/HeroHeader";
 import { SectionTag } from "./TotalStockPage";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const columns = [
-  { key: "system_name", label: "System" },
-  { key: "reference", label: "Reference" },
-  { key: "type", label: "Type" },
-  { key: "state", label: "State" },
-  { key: "from_loc", label: "From" },
-  { key: "to_loc", label: "To" },
-  { key: "model_code", label: "Model Code" },
-  { key: "qty", label: "Qty", align: "right" },
-  { key: "scheduled", label: "Scheduled" },
+  { key: "system_name", label: "System", i18nKey: "system" },
+  { key: "reference", label: "Reference", i18nKey: "reference" },
+  { key: "type", label: "Type", i18nKey: "type" },
+  { key: "state", label: "State", i18nKey: "state" },
+  { key: "from_loc", label: "From", i18nKey: "from" },
+  { key: "to_loc", label: "To", i18nKey: "to" },
+  { key: "model_code", label: "Model Code", i18nKey: "modelCode" },
+  { key: "qty", label: "Qty", i18nKey: "totalQty", align: "right" },
+  { key: "scheduled", label: "Scheduled", i18nKey: "scheduled" },
 ];
 
 export default function TransfersPage() {
+  const { t } = useLanguage();
+  const localizedColumns = columns.map((column) => ({ ...column, label: column.i18nKey ? t(column.i18nKey) : column.label }));
   const { reloadKey } = useAppState();
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,19 +42,19 @@ export default function TransfersPage() {
 
   return (
     <div style={{ padding: "18px 24px" }}>
-      <HeroHeader title="Pending Transfers" subtitle="SWAG Dashboard · Live Odoo Data" />
+      <HeroHeader title={t("pendingTransfers")} subtitle={t("liveDataSubtitle")} />
 
       {ok.length > 0 && (
         <KpiRow
           items={[
-            { label: "Total", value: ok.length, icon: Truck },
-            { label: "Total Qty", value: totalQty, format: (v) => v.toLocaleString(), icon: Package },
-            { label: "Systems", value: systemsCount, icon: Building2 },
+            { label: t("total"), value: ok.length, icon: Truck },
+            { label: t("totalQty"), value: totalQty, format: (v) => v.toLocaleString(), icon: Package },
+            { label: t("systems"), value: systemsCount, icon: Building2 },
           ]}
         />
       )}
 
-      <DataTable columns={columns} rows={ok} loading={loading} />
+      <DataTable columns={localizedColumns} rows={ok} loading={loading} />
       <div style={{ marginTop: 10, fontSize: 12, color: "var(--odoo-text-muted)" }}>
         {ok.length.toLocaleString()} rows
       </div>

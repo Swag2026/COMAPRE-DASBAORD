@@ -27,22 +27,26 @@ import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 const ROW_CAP = 200;
 
 const TOTAL_COLUMNS = [
-  { key: "system_name", label: "System" },
-  { key: "model_code", label: "Model Code" },
-  { key: "product", label: "Product" },
-  { key: "sale_price", label: "Sale Price", align: "right", render: (r) => r.sale_price.toFixed(2) },
-  { key: "purchase_qty", label: "Purchase Qty", align: "right" },
-  { key: "on_hand", label: "On Hand", align: "right" },
+  { key: "system_name", label: "System", i18nKey: "system" },
+  { key: "model_code", label: "Model Code", i18nKey: "modelCode" },
+  { key: "product", label: "Product", i18nKey: "product" },
+  { key: "sale_price", label: "Sale Price", i18nKey: "salePrice", align: "right", render: (r) => r.sale_price.toFixed(2) },
+  { key: "purchase_qty", label: "Purchase Qty", i18nKey: "purchaseQty", align: "right" },
+  { key: "on_hand", label: "On Hand", i18nKey: "onHand", align: "right" },
 ];
 
 const BRANCH_COLUMNS = [
-  { key: "system_name", label: "System" },
-  { key: "branch", label: "Branch" },
-  { key: "model_code", label: "Model Code" },
-  { key: "product", label: "Product" },
-  { key: "sale_price", label: "Sale Price", align: "right", render: (r) => r.sale_price.toFixed(2) },
-  { key: "on_hand", label: "On Hand", align: "right" },
+  { key: "system_name", label: "System", i18nKey: "system" },
+  { key: "branch", label: "Branch", i18nKey: "branchStock" },
+  { key: "model_code", label: "Model Code", i18nKey: "modelCode" },
+  { key: "product", label: "Product", i18nKey: "product" },
+  { key: "sale_price", label: "Sale Price", i18nKey: "salePrice", align: "right", render: (r) => r.sale_price.toFixed(2) },
+  { key: "on_hand", label: "On Hand", i18nKey: "onHand", align: "right" },
 ];
+
+function localizedColumns(columns, t) {
+  return columns.map((column) => ({ ...column, label: column.i18nKey ? t(column.i18nKey) : column.label }));
+}
 
 export default function ProductComparisonPage() {
   const { reloadKey, lowStockThreshold, exactMatch, setLastRun } = useAppState();
@@ -86,11 +90,11 @@ export default function ProductComparisonPage() {
       setTotalRows(t.rows);
       setBranchRows(b.rows);
       setLastRun(new Date().toLocaleTimeString());
-      showToast("Comparison updated.", "success");
+      showToast(t("comparisonUpdated"), "success");
     } catch {
       setTotalRows([]);
       setBranchRows([]);
-      showToast("Compare failed — check your connection.", "error");
+      showToast(t("compareFailed"), "error");
     } finally {
       setLoading(false);
     }
@@ -135,7 +139,7 @@ export default function ProductComparisonPage() {
             options={allSystems.map((s) => s.name)}
             selected={selectedSystems}
             onChange={setSelectedSystems}
-            placeholder="Select companies…"
+            placeholder={t("selectCompanies")}
           />
         </FilterField>
         <FilterField label={t("modeLabel")} width={200}>
@@ -158,10 +162,10 @@ export default function ProductComparisonPage() {
             />
           </FilterField>
         ) : (
-          <FilterField label="Codes (one per line, or comma-separated)" width={320}>
+          <FilterField label={t("codesMany")} width={320}>
             <textarea
               style={{ ...inputStyle, height: 68, resize: "vertical", paddingTop: 6 }}
-              placeholder={"ABC123\nDEF456"}
+              placeholder={t("codesPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value.replace(/\n/g, ","))}
             />
@@ -175,10 +179,10 @@ export default function ProductComparisonPage() {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, flexWrap: "wrap" }}>
-        <button onClick={() => runCompare()} disabled={loading} className="btn-primary" style={compareBtnStyle}>
+        <button onClick={() => runCompare()} disabled={loading} style={compareBtnStyle}>
           {loading ? (
             <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-              <Spinner size={15} color="#fff" /> Comparing…
+              <Spinner size={15} color="#fff" /> {t("comparing")}
             </span>
           ) : (
             <>{t("compareBtn")} <span className="rtl-flip">→</span></>
@@ -197,7 +201,7 @@ export default function ProductComparisonPage() {
               />
               <span style={{ color: "var(--odoo-text-muted)" }}>{s.name}</span>
               <span style={{ fontWeight: 600, color: health[s.name] ? "var(--odoo-success)" : "var(--odoo-danger)" }}>
-                {health[s.name] ? "Online" : "Offline"}
+                {health[s.name] ? t("online") : t("offline")}
               </span>
             </div>
           ))}
@@ -215,7 +219,7 @@ export default function ProductComparisonPage() {
             borderRadius: "var(--odoo-radius)",
           }}
         >
-          Set your company and search, then hit <b>{t("compareBtn")} →</b>.
+        {t("readyHint")} <b>{t("compareBtn")} →</b>.
         </div>
       )}
 
@@ -232,11 +236,11 @@ export default function ProductComparisonPage() {
               }}
             >
               <div style={{ fontWeight: 700, fontSize: 13, color: "#92400E", marginBottom: 4 }}>
-                Low Stock — {lowStockItems.length} items ≤ {lowStockThreshold}
+                {t("lowStockAlert")} — {lowStockItems.length} {t("items")} ≤ {lowStockThreshold}
               </div>
               {lowStockItems.slice(0, 5).map((r) => (
                 <div key={r.system_name + r.model_code} style={{ fontSize: 12, color: "#92400E" }}>
-                  {r.model_code} @ {r.system_name} ({r.on_hand})
+                  {r.model_code} {t("at")} {r.system_name} ({r.on_hand})
                 </div>
               ))}
             </div>
@@ -256,8 +260,8 @@ export default function ProductComparisonPage() {
           {/* Tab strip */}
           <div style={{ display: "flex", gap: 4, borderBottom: "1px solid var(--odoo-border)", marginBottom: 16 }}>
             {[
-              { key: "total", label: "Total Stock" },
-              { key: "branch", label: "Branch Stock" },
+              { key: "total", label: t("totalStock") },
+              { key: "branch", label: t("branchStock") },
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -290,6 +294,8 @@ export default function ProductComparisonPage() {
 }
 
 function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
+  const { t } = useLanguage();
+  const totalColumns = useMemo(() => localizedColumns(TOTAL_COLUMNS, t), [t]);
   const [sizeView, setSizeView] = useState(false);
   const [subSystems, setSubSystems] = useState(null); // null = not initialized yet
   const [subSearch, setSubSearch] = useState("");
@@ -341,20 +347,20 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
         <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, cursor: "pointer", fontWeight: 600 }}>
           <input type="checkbox" checked={sizeView} onChange={(e) => setSizeView(e.target.checked)} />
-          Size View
+          {t("sizeView")}
         </label>
       </div>
 
       <FilterBar>
-        <FilterField label="Company" width={240}>
+        <FilterField label={t("company")} width={240}>
           <ChipMultiSelect
             options={allSubSystems}
             selected={effectiveSubSystems}
             onChange={setSubSystems}
-            placeholder="Select companies…"
+            placeholder={t("selectCompanies")}
           />
         </FilterField>
-        <FilterField label="Search Model / Product" width={240}>
+        <FilterField label={t("searchModelProduct")} width={240}>
           <input
             style={inputStyle}
             placeholder="e.g. XP6013"
@@ -363,12 +369,12 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
           />
         </FilterField>
         {!sizeView && (
-          <FilterField label="Sort By" width={160}>
+        <FilterField label={t("sortBy")} width={160}>
             <select style={inputStyle} value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
               <option value="—">—</option>
               {sortableCols.map((c) => (
                 <option key={c} value={c}>
-                  {TOTAL_COLUMNS.find((tc) => tc.key === c)?.label}
+                  {totalColumns.find((tc) => tc.key === c)?.label}
                 </option>
               ))}
             </select>
@@ -378,7 +384,7 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
 
       {!sizeView && qtyBounds[1] > qtyBounds[0] && (
         <FilterBar>
-          <FilterField label="Qty Range — min" width={140}>
+          <FilterField label={t("qtyRangeMin")} width={140}>
             <input
               type="number"
               style={inputStyle}
@@ -388,7 +394,7 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
               onChange={(e) => setQtyRange([Number(e.target.value) || 0, qtyRange ? qtyRange[1] : qtyBounds[1]])}
             />
           </FilterField>
-          <FilterField label="Qty Range — max" width={140}>
+          <FilterField label={t("qtyRangeMax")} width={140}>
             <input
               type="number"
               style={inputStyle}
@@ -403,13 +409,13 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
 
       {!sizeView && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14, marginBottom: 14 }}>
-          <ChartCard title="Stock Value by System">
+          <ChartCard title={t("stockValueBySystem")}>
             <ValueBySystemChart rows={filtered} />
           </ChartCard>
-          <ChartCard title="Top 10 Models by Stock Value">
+          <ChartCard title={t("top10Models")}>
             <Top10ValueChart rows={filtered} />
           </ChartCard>
-          <ChartCard title="Stock Value Split">
+          <ChartCard title={t("stockValueSplit")}>
             <StockValueDonutCard rows={filtered} title="" />
           </ChartCard>
         </div>
@@ -419,9 +425,9 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
         <SizePivotTable pivot={sizePivot} threshold={lowStockThreshold} />
       ) : (
         <>
-          <DataTable columns={TOTAL_COLUMNS} rows={displayRows} loading={loading} lowStockThreshold={lowStockThreshold} />
+          <DataTable columns={totalColumns} rows={displayRows} loading={loading} lowStockThreshold={lowStockThreshold} />
           <div style={{ marginTop: 10, fontSize: 12, color: "var(--odoo-text-muted)" }}>
-            Showing {Math.min(filtered.length, ROW_CAP).toLocaleString()} / {filtered.length.toLocaleString()} rows
+            {t("showing")} {Math.min(filtered.length, ROW_CAP).toLocaleString()} / {filtered.length.toLocaleString()} {t("rows")}
           </div>
         </>
       )}
@@ -439,6 +445,8 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
 }
 
 function BranchStockTab({ rows, loading, search, lowStockThreshold }) {
+  const { t } = useLanguage();
+  const branchColumns = useMemo(() => localizedColumns(BRANCH_COLUMNS, t), [t]);
   const [selBranches, setSelBranches] = useState([]);
   const [minQty, setMinQty] = useState(0);
 
@@ -458,10 +466,10 @@ function BranchStockTab({ rows, loading, search, lowStockThreshold }) {
   return (
     <div>
       <FilterBar>
-        <FilterField label="Select Branch(es)" width={260}>
+        <FilterField label={t("selectBranches")} width={260}>
           <BranchPicker options={branchOptions} selected={selBranches} onChange={setSelBranches} />
         </FilterField>
-        <FilterField label="Min Qty" width={110}>
+        <FilterField label={t("minQty")} width={110}>
           <input
             type="number"
             min={0}
@@ -475,16 +483,16 @@ function BranchStockTab({ rows, loading, search, lowStockThreshold }) {
       {selBranches.length > 0 && filtered.length > 0 && (
         <KpiRow
           items={[
-            { label: "Branches", value: selBranches.length, icon: Building2 },
-            { label: "Total Units", value: totalUnits, format: (v) => v.toLocaleString(), icon: Package },
-            { label: "Models", value: modelsCount, format: (v) => v.toLocaleString(), icon: Layers },
+            { label: t("branches"), value: selBranches.length, icon: Building2 },
+            { label: t("totalUnits"), value: totalUnits, format: (v) => v.toLocaleString(), icon: Package },
+            { label: t("models"), value: modelsCount, format: (v) => v.toLocaleString(), icon: Layers },
           ]}
         />
       )}
 
-      <DataTable columns={BRANCH_COLUMNS} rows={displayRows} loading={loading} lowStockThreshold={lowStockThreshold} />
+      <DataTable columns={branchColumns} rows={displayRows} loading={loading} lowStockThreshold={lowStockThreshold} />
       <div style={{ marginTop: 10, fontSize: 12, color: "var(--odoo-text-muted)" }}>
-        Showing {Math.min(filtered.length, ROW_CAP).toLocaleString()} / {filtered.length.toLocaleString()} rows
+        {t("showing")} {Math.min(filtered.length, ROW_CAP).toLocaleString()} / {filtered.length.toLocaleString()} {t("rows")}
       </div>
 
       <ExportButtons
@@ -496,7 +504,7 @@ function BranchStockTab({ rows, loading, search, lowStockThreshold }) {
       />
 
       <div style={{ marginTop: 14 }}>
-        <ChartCard title="Qty by Branch">
+        <ChartCard title={t("qtyByBranch")}>
           <BranchQtyChart rows={rows} />
         </ChartCard>
       </div>
@@ -505,6 +513,7 @@ function BranchStockTab({ rows, loading, search, lowStockThreshold }) {
 }
 
 function BranchPicker({ options, selected, onChange }) {
+  const { t } = useLanguage();
   const toggle = (opt) => {
     if (selected.includes(opt)) onChange(selected.filter((s) => s !== opt));
     else onChange([...selected, opt]);
@@ -521,7 +530,7 @@ function BranchPicker({ options, selected, onChange }) {
       }}
     >
       {options.length === 0 && (
-        <div style={{ fontSize: 12, color: "var(--odoo-text-faint)", padding: 4 }}>Leave empty = All</div>
+        <div style={{ fontSize: 12, color: "var(--odoo-text-faint)", padding: 4 }}>{t("allBranches")}</div>
       )}
       {options.map((opt) => (
         <label key={opt} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, padding: "3px 4px", cursor: "pointer" }}>
@@ -533,6 +542,12 @@ function BranchPicker({ options, selected, onChange }) {
   );
 }
 
-// Visual styling now lives in the shared .btn-primary CSS class (gradient,
-// hover lift, active scale — matches the reference app's .btn exactly).
-const compareBtnStyle = {};
+const compareBtnStyle = {
+  background: "var(--odoo-purple)",
+  color: "#fff",
+  border: "none",
+  borderRadius: 8,
+  padding: "11px 28px",
+  fontSize: 13.5,
+  fontWeight: 700,
+};

@@ -1,11 +1,13 @@
 import { useMemo, useState } from "react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function WhatsAppShare({ rows, title = "Stock Report" }) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
 
   const message = useMemo(() => {
     const ok = rows.filter((r) => r.status === "OK");
-    const lines = [`*${title}*`, `_${new Date().toLocaleDateString()}_`, ""];
+    const lines = [`*${title === "Stock Report" ? t("stockReport") : title}*`, `_${new Date().toLocaleDateString()}_`, ""];
     for (const r of ok.slice(0, 50)) {
       lines.push(`${r.model_code} — ${r.product} — ${r.on_hand} pcs (${r.system_name})`);
     }
@@ -46,7 +48,7 @@ export default function WhatsAppShare({ rows, title = "Stock Report" }) {
           padding: 0,
         }}
       >
-        {open ? "▾" : "▸"} WhatsApp Share
+        {open ? "▾" : "▸"} {t("whatsappShare")}
       </button>
 
       {open && (
@@ -82,7 +84,7 @@ export default function WhatsAppShare({ rows, title = "Stock Report" }) {
                 textDecoration: "none",
               }}
             >
-              WhatsApp →
+              واتساب →
             </a>
             <button
               onClick={downloadTxt}
@@ -95,7 +97,7 @@ export default function WhatsAppShare({ rows, title = "Stock Report" }) {
                 fontWeight: 600,
               }}
             >
-              Download .txt
+              {t("downloadTxt")}
             </button>
           </div>
         </div>

@@ -2,8 +2,10 @@ import { useRef, useState } from "react";
 import { uploadTablePreview, uploadTableExtract } from "../api/client";
 import { useToast } from "../api/ToastContext";
 import Spinner from "./Spinner";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function ExcelUploadPanel({ onSearch }) {
+  const { t } = useLanguage();
   const inputRef = useRef(null);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null); // {columns, guessed_column, preview_rows, total_rows}
@@ -26,7 +28,7 @@ export default function ExcelUploadPanel({ onSearch }) {
       setColumn(p.guessed_column);
       await runExtract(f, p.guessed_column);
     } catch (err) {
-      showToast(err?.response?.status === 422 ? "The file is empty." : "Error reading the file.", "error");
+      showToast(err?.response?.status === 422 ? t("fileEmpty") : t("errorFile"), "error");
     } finally {
       setBusy(false);
     }
@@ -50,30 +52,30 @@ export default function ExcelUploadPanel({ onSearch }) {
 
   function pick(tab) {
     onSearch(extracted.codes.join(","), tab);
-    showToast(`Searching ${extracted.codes.length} codes in ${tab === "total" ? "Total Stock" : "Branch Stock"}.`, "success");
+    showToast(`${extracted.codes.length} ${t("codesFound")} ${tab === "total" ? t("totalStock") : t("branchStock")}.`, "success");
   }
 
   return (
     <div style={{ background: "var(--odoo-surface)", border: "1px solid var(--odoo-border)", borderRadius: "var(--odoo-radius)", padding: 16 }}>
       <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--odoo-purple)", marginBottom: 8 }}>
-        ✅ Upload Excel/CSV — Exact Models (Recommended)
+        ✅ {t("uploadExcel")}
       </div>
       <div style={{ background: "var(--odoo-purple-pale)", color: "var(--odoo-purple)", fontSize: 11.5, padding: "8px 10px", borderRadius: 6, marginBottom: 10 }}>
-        Best for accuracy — reads the exact text from your chosen column. No pattern matching, no missed codes.
+        {t("excelHint")}
       </div>
 
       <input ref={inputRef} type="file" accept=".xlsx,.xls,.csv" onChange={handleFile} disabled={busy} style={{ fontSize: 12, marginBottom: 10 }} />
 
       {busy && (
         <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--odoo-text-muted)" }}>
-          <Spinner size={14} /> Reading…
+          <Spinner size={14} /> {t("reading")}
         </div>
       )}
 
       {preview && (
         <div>
           <div style={{ marginBottom: 10 }}>
-            <div style={{ fontSize: 10.5, fontWeight: 600, marginBottom: 4 }}>Which column has the model codes?</div>
+            <div style={{ fontSize: 10.5, fontWeight: 600, marginBottom: 4 }}>{t("modelCodeColumn")}</div>
             <select
               value={column}
               onChange={(e) => handleColumnChange(e.target.value)}
@@ -88,15 +90,15 @@ export default function ExcelUploadPanel({ onSearch }) {
           {extracted && (
             <>
               <div style={{ display: "flex", gap: 20, marginBottom: 10 }}>
-                <Metric label="Total rows in file" value={extracted.total_rows} />
-                <Metric label="Unique exact codes" value={extracted.unique_count} />
+                <Metric label={t("totalRowsFile")} value={extracted.total_rows} />
+                <Metric label={t("uniqueExactCodes")} value={extracted.unique_count} />
               </div>
 
               <button
                 onClick={() => setExpanded((x) => !x)}
                 style={{ background: "none", border: "none", color: "var(--odoo-purple)", fontSize: 12, fontWeight: 600, padding: 0, marginBottom: 8 }}
               >
-                {expanded ? "▾" : "▸"} Preview all {extracted.unique_count} codes exactly as read
+                {expanded ? "▾" : "▸"} {t("previewCodes")} ({extracted.unique_count})
               </button>
               {expanded && (
                 <div style={{ maxHeight: 160, overflowY: "auto", border: "1px solid var(--odoo-border)", borderRadius: 6, marginBottom: 8 }}>
@@ -114,14 +116,14 @@ export default function ExcelUploadPanel({ onSearch }) {
               )}
 
               {extracted.unique_count === 0 ? (
-                <div style={{ fontSize: 12, color: "var(--odoo-warning)" }}>No codes found in that column. Try a different column.</div>
+                <div style={{ fontSize: 12, color: "var(--odoo-warning)" }}>{t("noCodesColumn")}</div>
               ) : (
                 <div style={{ display: "flex", gap: 8 }}>
                   <button onClick={() => pick("total")} style={btnStyle(true)}>
-                    Total Stock ({extracted.unique_count} codes)
+                    {t("totalStock")} ({extracted.unique_count})
                   </button>
                   <button onClick={() => pick("branch")} style={btnStyle(false)}>
-                    Branch-wise ({extracted.unique_count} codes)
+                    {t("branchWise")} ({extracted.unique_count})
                   </button>
                 </div>
               )}

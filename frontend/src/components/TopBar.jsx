@@ -1,4 +1,4 @@
-import { Bell, LogOut } from "lucide-react";
+import { Bell, LogOut, Menu } from "lucide-react";
 import { useAuth } from "../api/AuthContext";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -7,32 +7,23 @@ export default function TopBar() {
   const { t } = useLanguage();
 
   return (
-    <header
-      style={{
-        height: 64,
-        background: "var(--odoo-surface)",
-        borderBottom: "1px solid var(--odoo-border)",
-        display: "flex",
-        alignItems: "center",
-        padding: "0 24px",
-        gap: 16,
-        position: "sticky",
-        top: 0,
-        zIndex: 20,
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        <h1 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: "var(--odoo-heading)" }}>
+    <header className="topbar">
+      <button className="menu-toggle" aria-label={t("openMenu")}><Menu size={18} /></button>
+      <div className="topbar-title">
+        <h1>
           {t("topBarTitle")}
         </h1>
-        <p style={{ margin: "3px 0 0", fontSize: 12, color: "var(--odoo-purple)", fontWeight: 600 }}>
+        <p>
           {username}
         </p>
       </div>
-
-      <IconBtn title={t("alerts")}><Bell size={17} /></IconBtn>
-      <span style={{ width: 1, height: 22, background: "var(--odoo-border)" }} />
-      <IconBtn title={t("logout")} danger onClick={logout}><LogOut size={17} /></IconBtn>
+      <div className="topbar-actions">
+        <div className="action-group">
+          <IconBtn title={t("alerts")}><Bell size={17} /></IconBtn>
+          <span className="action-divider" />
+          <IconBtn title={t("logout")} danger onClick={logout}><LogOut size={17} /></IconBtn>
+        </div>
+      </div>
     </header>
   );
 }
@@ -43,14 +34,6 @@ function IconBtn({ children, title, danger, onClick }) {
       title={title}
       onClick={onClick}
       className={`icon-btn${danger ? " danger" : ""}`}
-      style={{
-        width: 36,
-        height: 36,
-        borderRadius: 9,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
     >
       {children}
     </button>
