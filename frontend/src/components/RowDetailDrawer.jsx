@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { PackageSearch, Sparkles } from "lucide-react";
+import { PackageSearch } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageContext";
 
 // Colorful, animated slide-over detail panel. Each field cascades in with its
@@ -48,9 +48,6 @@ export default function RowDetailDrawer({ row, columns, onClose, lowStockThresho
       <div onClick={onClose} className="rdd-backdrop" />
       <div className="rdd-panel" role="dialog" aria-modal="true">
         <div className="rdd-header" style={{ background: tone.grad }}>
-          <div className="rdd-header-icon">
-            <Sparkles size={16} />
-          </div>
           <div style={{ minWidth: 0 }}>
             <div className="rdd-eyebrow">{t("details")}</div>
             <div className="rdd-title" title={titleValue}>
@@ -116,16 +113,6 @@ export default function RowDetailDrawer({ row, columns, onClose, lowStockThresho
           gap: 12px;
           padding: 20px 22px;
           color: #fff;
-          flex-shrink: 0;
-        }
-        .rdd-header-icon {
-          width: 34px;
-          height: 34px;
-          border-radius: 10px;
-          background: rgba(255,255,255,0.18);
-          display: flex;
-          align-items: center;
-          justify-content: center;
           flex-shrink: 0;
         }
         .rdd-eyebrow {
