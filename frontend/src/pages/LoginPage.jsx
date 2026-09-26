@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Languages } from "lucide-react";
 import { useAuth } from "../api/AuthContext";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { t, lang, toggleLanguage } = useLanguage();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,7 +17,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     if (!username.trim() || !password) {
-      setError("Fill in both fields.");
+      setError(t("loginFillFields"));
       return;
     }
     setLoading(true);
@@ -22,7 +25,7 @@ export default function LoginPage() {
       await login(username.trim(), password);
       navigate("/product-comparison", { replace: true });
     } catch (err) {
-      setError(err?.response?.status === 401 ? "Wrong email or password." : "Connection error.");
+      setError(err?.response?.status === 401 ? t("loginWrongCreds") : t("loginConnError"));
     } finally {
       setLoading(false);
     }
@@ -110,7 +113,7 @@ export default function LoginPage() {
           }}
         >
           <div style={{ marginBottom: 14 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 5 }}>Email</div>
+            <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 5 }}>{t("loginEmail")}</div>
             <input
               style={fieldStyle}
               type="email"
@@ -121,7 +124,7 @@ export default function LoginPage() {
             />
           </div>
           <div style={{ marginBottom: 18 }}>
-            <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 5 }}>Password</div>
+            <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 5 }}>{t("loginPassword")}</div>
             <input
               style={fieldStyle}
               type="password"
@@ -153,11 +156,23 @@ export default function LoginPage() {
               opacity: loading ? 0.7 : 1,
             }}
           >
-            {loading ? "Signing in…" : "Sign In →"}
+            {loading ? t("loginSigningIn") : <>{t("loginSignIn")} <span className="rtl-flip">→</span></>}
           </button>
         </form>
 
-        <div style={{ textAlign: "center", marginTop: 20, fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: "#6B7280" }}>
+        <button
+          type="button"
+          onClick={toggleLanguage}
+          style={{
+            display: "flex", alignItems: "center", gap: 6, margin: "16px auto 0",
+            background: "transparent", border: "1px solid rgba(107,114,128,0.3)",
+            borderRadius: 20, padding: "5px 12px", fontSize: 11, color: "#6B7280",
+          }}
+        >
+          <Languages size={12} /> {lang === "en" ? "العربية" : "English"}
+        </button>
+
+        <div style={{ textAlign: "center", marginTop: 12, fontSize: 9, letterSpacing: 3, textTransform: "uppercase", color: "#6B7280" }}>
           SWAG Dashboard · 2026 · Powered by Odoo
         </div>
       </div>

@@ -1,8 +1,10 @@
 import { Bell, LogOut } from "lucide-react";
 import { useAuth } from "../api/AuthContext";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function TopBar() {
   const { username, logout } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <header
@@ -21,16 +23,16 @@ export default function TopBar() {
     >
       <div style={{ flex: 1 }}>
         <h1 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: "var(--odoo-text)" }}>
-          Product Comparison Dashboard
+          {t("topBarTitle")}
         </h1>
         <p style={{ margin: "3px 0 0", fontSize: 12, color: "var(--odoo-purple)", fontWeight: 600 }}>
           {username}
         </p>
       </div>
 
-      <IconBtn title="Alerts"><Bell size={17} /></IconBtn>
+      <IconBtn title={t("alerts")}><Bell size={17} /></IconBtn>
       <span style={{ width: 1, height: 22, background: "var(--odoo-border)" }} />
-      <IconBtn title="Logout" danger onClick={logout}><LogOut size={17} /></IconBtn>
+      <IconBtn title={t("logout")} danger onClick={logout}><LogOut size={17} /></IconBtn>
     </header>
   );
 }

@@ -12,7 +12,7 @@ export default function KpiRow({ items }) {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: `repeat(auto-fit, minmax(180px, 1fr))`,
+        gridTemplateColumns: `repeat(auto-fit, minmax(215px, 1fr))`,
         gap: 14,
         marginBottom: 20,
       }}
@@ -62,7 +62,7 @@ function KpiCard({ item, delay }) {
         </span>
       )}
       <div>
-        <div style={{ fontSize: 20, fontWeight: 800, color: item.color || "var(--odoo-text)", lineHeight: 1.15 }}>
+        <div style={{ fontSize: 20, fontWeight: 800, color: item.color || "var(--odoo-heading)", lineHeight: 1.15 }}>
           {display}
         </div>
         <div style={{ fontSize: 12, color: "var(--odoo-text-muted)", marginTop: 2 }}>{item.label}</div>

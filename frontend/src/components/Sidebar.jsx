@@ -1,9 +1,19 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Languages } from "lucide-react";
 import { useAppState } from "../api/AppStateContext";
 import { useToast } from "../api/ToastContext";
+import { useLanguage } from "../i18n/LanguageContext";
 import { FLAT_NAV } from "./MegaMenu";
 import Spinner from "./Spinner";
+
+const NAV_LABEL_KEYS = {
+  "Product Comparison": "navProductComparison",
+  "Branch Stock": "navBranchStock",
+  "Reorder Suggestions": "navReorder",
+  "Pending Transfers": "navTransfers",
+  "Season Comparison": "navSeasonComparison",
+};
 
 export default function Sidebar() {
   const {
@@ -16,6 +26,7 @@ export default function Sidebar() {
   const { showToast } = useToast();
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { t, lang, toggleLanguage } = useLanguage();
 
   async function handleReload() {
     setReloading(true);
@@ -36,7 +47,7 @@ export default function Sidebar() {
         top: 0,
         height: "100vh",
         background: "var(--odoo-surface)",
-        borderRight: "1px solid var(--odoo-border)",
+        borderInlineEnd: "1px solid var(--odoo-border)",
         boxShadow: "0 4px 10px rgba(45,25,40,.06), 0 14px 34px rgba(45,25,40,.15)",
         display: "flex",
         flexDirection: "column",
@@ -62,8 +73,8 @@ export default function Sidebar() {
           </svg>
         </div>
         <div>
-          <div style={{ fontSize: 14.5, fontWeight: 800, color: "var(--odoo-text)" }}>SWAG</div>
-          <div style={{ fontSize: 11, color: "var(--odoo-text-faint)", marginTop: 1 }}>Product Dashboard</div>
+          <div style={{ fontSize: 14.5, fontWeight: 800, color: "var(--odoo-heading)" }}>{t("brandName")}</div>
+          <div style={{ fontSize: 11, color: "var(--odoo-text-faint)", marginTop: 1 }}>{t("brandSub")}</div>
         </div>
       </div>
 
@@ -88,15 +99,15 @@ export default function Sidebar() {
                 fontWeight: active ? 700 : 500,
                 cursor: "pointer",
                 position: "relative",
-                textAlign: "left",
+                textAlign: "start",
                 boxShadow: active ? "inset 0 0 0 1px rgba(113,75,103,.08)" : "none",
               }}
             >
               {active && (
-                <span style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, borderRadius: 3, background: "var(--odoo-purple)" }} />
+                <span style={{ position: "absolute", insetInlineStart: 0, top: 8, bottom: 8, width: 3, borderRadius: 3, background: "var(--odoo-purple)" }} />
               )}
               <Icon size={17} style={{ color: active ? "var(--odoo-purple)" : "var(--odoo-text-faint)", flexShrink: 0 }} />
-              <span>{item.label}</span>
+              <span>{t(NAV_LABEL_KEYS[item.label]) || item.label}</span>
             </button>
           );
         })}
@@ -105,11 +116,11 @@ export default function Sidebar() {
       {/* Snapshot card */}
       <div style={{ margin: "0 14px 14px", padding: "13px 15px", border: "1px solid var(--odoo-border)", borderRadius: 10, background: "#FBFBFB" }}>
         <div style={{ fontSize: 10, fontWeight: 700, color: "var(--odoo-text-faint)", textTransform: "uppercase", letterSpacing: 0.4, marginBottom: 9 }}>
-          Session
+          {t("sessionTitle")}
         </div>
-        <SnapRow label="Low stock ≤" value={lowStockThreshold} />
+        <SnapRow label={t("lowStockLabel")} value={lowStockThreshold} />
         <div style={{ marginTop: 10 }}>
-          <SnapRow label="Last run" value={lastRun || "—"} />
+          <SnapRow label={t("lastRunLabel")} value={lastRun || "—"} />
         </div>
       </div>
 
@@ -117,10 +128,10 @@ export default function Sidebar() {
       <div style={{ padding: "0 16px 14px" }}>
         <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12.5, color: "var(--odoo-text-muted)", cursor: "pointer", marginBottom: 10 }}>
           <input type="checkbox" checked={exactMatch} onChange={(e) => setExactMatch(e.target.checked)} />
-          Exact match search
+          {t("exactMatchLabel")}
         </label>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 12, color: "var(--odoo-text-muted)" }}>Threshold</span>
+          <span style={{ fontSize: 12, color: "var(--odoo-text-muted)" }}>{t("thresholdLabel")}</span>
           <input
             type="number"
             min={0}
@@ -129,14 +140,21 @@ export default function Sidebar() {
             style={{ width: 60, height: 28, padding: "0 8px", border: "1px solid var(--odoo-border-strong)", borderRadius: 6, fontSize: 12.5 }}
           />
           <button onClick={handleReload} disabled={reloading} style={reloadBtnStyle}>
-            {reloading ? <Spinner size={12} /> : "⟳"}
+            {reloading ? <Spinner size={12} /> : <span className="rtl-flip">⟳</span>}
+          </button>
+          <button
+            onClick={toggleLanguage}
+            title={lang === "en" ? "العربية" : "English"}
+            style={reloadBtnStyle}
+          >
+            <Languages size={13} />
           </button>
         </div>
       </div>
 
       <div style={{ padding: "12px 20px 18px", fontSize: 11.5, color: "var(--odoo-text-faint)", borderTop: "1px solid var(--odoo-border)", display: "flex", gap: 8 }}>
         <span>🔒</span>
-        <span>Live data from Odoo, secured behind your account login.</span>
+        <span>{t("footerSecure")}</span>
       </div>
 
       <style>{`
@@ -150,7 +168,7 @@ function SnapRow({ label, value }) {
   return (
     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", fontSize: 12, color: "var(--odoo-text-muted)" }}>
       <span>{label}</span>
-      <span style={{ fontWeight: 800, color: "var(--odoo-text)", fontSize: 13.5 }}>{value}</span>
+      <span style={{ fontWeight: 800, color: "var(--odoo-heading)", fontSize: 13.5 }}>{value}</span>
     </div>
   );
 }

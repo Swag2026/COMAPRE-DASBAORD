@@ -9,6 +9,7 @@ import { useAppState } from "../api/AppStateContext";
 import DataTable from "../components/DataTable";
 import ExportButtons from "../components/ExportButtons";
 import KpiRow from "../components/KpiRow";
+import ChartCard from "../components/ChartCard";
 import HeroHeader from "../components/HeroHeader";
 import BranchQtyChart from "../components/BranchQtyChart";
 import { ValueBySystemChart, Top10ValueChart } from "../components/TotalStockCharts";
@@ -20,6 +21,7 @@ import ChipMultiSelect from "../components/ChipMultiSelect";
 import SizePivotTable, { buildSizePivot } from "../components/SizePivotTable";
 import Spinner from "../components/Spinner";
 import { useToast } from "../api/ToastContext";
+import { useLanguage } from "../i18n/LanguageContext";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 
 const ROW_CAP = 200;
@@ -121,13 +123,14 @@ export default function ProductComparisonPage() {
   const lowStockItems = ok.filter((r) => r.on_hand > 0 && r.on_hand <= lowStockThreshold);
 
   const compared = totalRows !== null;
+  const { t } = useLanguage();
 
   return (
     <div style={{ padding: "18px 24px" }}>
-      <HeroHeader title="Product Comparison" subtitle="SWAG Dashboard · Live Odoo Data" />
+      <HeroHeader title={t("heroTitle")} subtitle={t("heroSubtitle")} />
 
       <FilterBar sticky>
-        <FilterField label="Company" width={280}>
+        <FilterField label={t("companyLabel")} width={280}>
           <ChipMultiSelect
             options={allSystems.map((s) => s.name)}
             selected={selectedSystems}
@@ -135,21 +138,21 @@ export default function ProductComparisonPage() {
             placeholder="Select companies…"
           />
         </FilterField>
-        <FilterField label="Mode" width={200}>
+        <FilterField label={t("modeLabel")} width={200}>
           <div style={{ display: "flex", gap: 14, height: 34, alignItems: "center" }}>
             <label style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12.5 }}>
-              <input type="radio" checked={!multiMode} onChange={() => setMultiMode(false)} /> Single Model
+              <input type="radio" checked={!multiMode} onChange={() => setMultiMode(false)} /> {t("singleModel")}
             </label>
             <label style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12.5 }}>
-              <input type="radio" checked={multiMode} onChange={() => setMultiMode(true)} /> Multiple Models
+              <input type="radio" checked={multiMode} onChange={() => setMultiMode(true)} /> {t("multipleModels")}
             </label>
           </div>
         </FilterField>
         {!multiMode ? (
-          <FilterField label="Search Model / Product" width={280}>
+          <FilterField label={t("searchLabel")} width={280}>
             <input
               style={inputStyle}
-              placeholder="e.g. RVT196"
+              placeholder={t("searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -178,7 +181,7 @@ export default function ProductComparisonPage() {
               <Spinner size={15} color="#fff" /> Comparing…
             </span>
           ) : (
-            "Compare →"
+            <>{t("compareBtn")} <span className="rtl-flip">→</span></>
           )}
         </button>
         <div style={{ display: "flex", gap: 14, fontSize: 12 }}>
@@ -212,7 +215,7 @@ export default function ProductComparisonPage() {
             borderRadius: "var(--odoo-radius)",
           }}
         >
-          Set your company and search, then hit <b>Compare →</b>.
+          Set your company and search, then hit <b>{t("compareBtn")} →</b>.
         </div>
       )}
 
@@ -241,12 +244,12 @@ export default function ProductComparisonPage() {
 
           <KpiRow
             items={[
-              { label: "Total Rows", value: filteredTotal.length, format: (v) => v.toLocaleString(), icon: List },
-              { label: "Systems Online", value: onlineCount, format: (v) => `${v}/${allSystems.length}`, icon: Wifi, tone: "good" },
-              { label: "Total Qty", value: totalQty, format: (v) => v.toLocaleString(), icon: Package },
-              { label: "Avg Price (SAR)", value: avgPrice, format: (v) => v.toLocaleString(), icon: Tag },
-              { label: "Stock Value (SAR)", value: stockValue, format: (v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}K` : v.toFixed(0)), icon: Wallet },
-              { label: "Zero Stock Items", value: zeroStockItems, icon: AlertTriangle, tone: zeroStockItems > 0 ? "bad" : "default" },
+              { label: t("kpiTotalRows"), value: filteredTotal.length, format: (v) => v.toLocaleString(), icon: List },
+              { label: t("kpiSystemsOnline"), value: onlineCount, format: (v) => `${v}/${allSystems.length}`, icon: Wifi, tone: "good" },
+              { label: t("kpiTotalQty"), value: totalQty, format: (v) => v.toLocaleString(), icon: Package },
+              { label: `${t("kpiAvgPrice")} (SAR)`, value: avgPrice, format: (v) => v.toLocaleString(), icon: Tag },
+              { label: `${t("kpiStockValue")} (SAR)`, value: stockValue, format: (v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}K` : v.toFixed(0)), icon: Wallet },
+              { label: t("kpiZeroStock"), value: zeroStockItems, icon: AlertTriangle, tone: zeroStockItems > 0 ? "bad" : "default" },
             ]}
           />
 
@@ -406,8 +409,8 @@ function TotalStockTab({ rows, loading, search, lowStockThreshold }) {
           <ChartCard title="Top 10 Models by Stock Value">
             <Top10ValueChart rows={filtered} />
           </ChartCard>
-          <ChartCard title="">
-            <StockValueDonutCard rows={filtered} />
+          <ChartCard title="Stock Value Split">
+            <StockValueDonutCard rows={filtered} title="" />
           </ChartCard>
         </div>
       )}
@@ -492,17 +495,10 @@ function BranchStockTab({ rows, loading, search, lowStockThreshold }) {
         ]}
       />
 
-      <div
-        style={{
-          background: "var(--odoo-surface)",
-          border: "1px solid var(--odoo-border)",
-          borderRadius: "var(--odoo-radius)",
-          padding: 14,
-          marginTop: 14,
-        }}
-      >
-        <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Qty by Branch</div>
-        <BranchQtyChart rows={rows} />
+      <div style={{ marginTop: 14 }}>
+        <ChartCard title="Qty by Branch">
+          <BranchQtyChart rows={rows} />
+        </ChartCard>
       </div>
     </div>
   );
@@ -533,15 +529,6 @@ function BranchPicker({ options, selected, onChange }) {
           <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{opt}</span>
         </label>
       ))}
-    </div>
-  );
-}
-
-function ChartCard({ title, children }) {
-  return (
-    <div style={{ background: "var(--odoo-surface)", border: "1px solid var(--odoo-border)", borderRadius: "var(--odoo-radius)", padding: 14 }}>
-      {title && <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>{title}</div>}
-      {children}
     </div>
   );
 }

@@ -32,7 +32,7 @@ export default function StockValueDonutCard({ rows, title = "Stock Split by Syst
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 12 }}>{title}</div>
+      {title && <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 12 }}>{title}</div>}
       <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <DonutChart
           data={data}

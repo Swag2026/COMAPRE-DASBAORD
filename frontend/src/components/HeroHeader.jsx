@@ -14,7 +14,7 @@ export default function HeroHeader({ title, subtitle }) {
         style={{
           position: "absolute",
           top: "-50%",
-          right: "-8%",
+          insetInlineEnd: "-8%",
           width: 260,
           height: 260,
           background: "rgba(255,255,255,0.05)",

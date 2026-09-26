@@ -16,6 +16,7 @@
   --odoo-text: #2C2C2C;          /* ink-900 */
   --odoo-text-muted: #6B6B6B;    /* ink-600 */
   --odoo-text-faint: #9C9C9C;    /* ink-400 */
+  --odoo-heading: #3D2839;       /* heading-text — plum-dark, used for KPI numbers, chart/card titles, brand text (not body text) */
 
   --odoo-success: #3D7A4E;
   --odoo-warning: #B5842A;
@@ -35,7 +36,10 @@ html, body, #root {
 }
 
 body {
-  font-family: "Inter", -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Matches the design reference's font stack exactly (IBM Plex Sans
+     Arabic renders both scripts cleanly, so English and Arabic share one
+     font instead of visibly swapping typefaces on language toggle). */
+  font-family: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
   background: var(--odoo-bg);
   color: var(--odoo-text);
   font-size: 13px;
@@ -75,3 +79,32 @@ a:hover { text-decoration: underline; }
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Ported from the design reference — used for panel/card entrances,
+   modals, and drawing attention to a row/section that just changed. */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes modalScaleIn {
+  from { opacity: 0; transform: scale(.94) translateY(8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes rowHighlightFlash {
+  0%, 100% { background: transparent; }
+  50% { background: var(--odoo-warning-bg, #FBF0DB); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fade-slide-in { animation: fadeSlide 0.3s ease both; }
+.row-highlight-flash { animation: rowHighlightFlash 1.5s ease 2; }
+
+/* RTL: a couple of one-way glyphs (arrows, the reload icon) read backwards
+   once the page mirrors — flip them back to point the correct direction. */
+[dir="rtl"] .rtl-flip { transform: scaleX(-1); display: inline-block; }

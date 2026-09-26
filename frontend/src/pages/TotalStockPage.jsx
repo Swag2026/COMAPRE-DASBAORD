@@ -7,6 +7,7 @@ import FileUploadSearch from "../components/FileUploadSearch";
 import WhatsAppShare from "../components/WhatsAppShare";
 import { ValueBySystemChart, Top10ValueChart } from "../components/TotalStockCharts";
 import HeroHeader from "../components/HeroHeader";
+import ChartCard from "../components/ChartCard";
 import { FilterBar, FilterField, inputStyle } from "../components/FilterBar";
 
 const columns = [
@@ -85,21 +86,6 @@ export default function TotalStockPage() {
   );
 }
 
-function ChartCard({ title, children }) {
-  return (
-    <div
-      style={{
-        background: "var(--odoo-surface)",
-        border: "1px solid var(--odoo-border)",
-        borderRadius: "var(--odoo-radius)",
-        padding: 14,
-      }}
-    >
-      <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>{title}</div>
-      {children}
-    </div>
-  );
-}
 
 export function SectionTag({ children }) {
   return (
