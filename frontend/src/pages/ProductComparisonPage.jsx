@@ -257,8 +257,20 @@ export default function ProductComparisonPage() {
             ]}
           />
 
-          {/* Tab strip */}
-          <div style={{ display: "flex", gap: 4, borderBottom: "1px solid var(--odoo-border)", marginBottom: 16 }}>
+          {/* Tab strip — solid black/white segmented control, matching the
+              reference's "Commercial / Residential" pill switch rather than
+              an underlined tab (purple stays reserved for brand accents). */}
+          <div
+            style={{
+              display: "inline-flex",
+              gap: 4,
+              padding: 4,
+              marginBottom: 16,
+              background: "var(--odoo-bg)",
+              border: "1px solid var(--odoo-border)",
+              borderRadius: 10,
+            }}
+          >
             {[
               { key: "total", label: t("totalStock") },
               { key: "branch", label: t("branchStock") },
@@ -267,13 +279,15 @@ export default function ProductComparisonPage() {
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
                 style={{
-                  padding: "10px 16px",
+                  padding: "8px 18px",
                   fontSize: 13,
-                  fontWeight: 600,
-                  background: "none",
+                  fontWeight: 700,
+                  borderRadius: 7,
                   border: "none",
-                  borderBottom: activeTab === tab.key ? "2px solid var(--odoo-purple)" : "2px solid transparent",
-                  color: activeTab === tab.key ? "var(--odoo-purple)" : "var(--odoo-text-muted)",
+                  cursor: "pointer",
+                  background: activeTab === tab.key ? "#1a1a1a" : "transparent",
+                  color: activeTab === tab.key ? "#fff" : "var(--odoo-text-muted)",
+                  transition: "all .15s ease",
                 }}
               >
                 {tab.label}

@@ -238,21 +238,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .tabs button svg { color: var(--odoo-text-faint); flex-shrink: 0; }
 .tabs button:hover { background: var(--odoo-bg); color: var(--odoo-heading); transform: translateX(-2px); }
 .tabs button.active {
-  background: linear-gradient(135deg, var(--odoo-purple-pale), var(--odoo-bg) 130%);
-  color: var(--odoo-purple);
+  background: #1a1a1a;
+  color: #fff;
   font-weight: 700;
-  box-shadow: inset 0 0 0 1px rgba(113, 75, 103, .08);
 }
-.tabs button.active::before {
-  content: "";
-  position: absolute;
-  inset-inline-start: 0;
-  inset-block: 9px;
-  width: 3px;
-  border-radius: 3px;
-  background: var(--odoo-purple);
-}
-.tabs button.active svg { color: var(--odoo-purple); }
+.tabs button.active svg { color: #fff; }
 
 .sidebar-snapshot {
   margin: 0 14px 14px;
@@ -357,6 +347,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   background: var(--odoo-bg);
 }
 .action-divider { width: 1px; height: 22px; background: var(--odoo-border); }
+/* Reference's toolbar buttons are solid black/white monochrome — not
+   purple-tinted like the rest of the UI. Purple stays reserved for the
+   brand hero, primary CTA and chart accents; these are neutral chrome. */
 .icon-btn {
   display: flex;
   align-items: center;
@@ -364,15 +357,16 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   width: 36px;
   height: 36px;
   padding: 0;
-  border: 1px solid var(--odoo-border);
-  border-radius: 7px;
-  background: #fbfbfb;
-  color: var(--odoo-text-muted);
+  border: 1px solid #1a1a1a;
+  border-radius: 8px;
+  background: #1a1a1a;
+  color: #fff;
   transition: all .18s ease;
 }
-.icon-btn:hover { border-color: var(--odoo-purple-light); background: var(--odoo-purple-pale); color: var(--odoo-purple); transform: translateY(-1px); }
-.icon-btn.danger { color: var(--odoo-danger); }
-.icon-btn.danger:hover { border-color: var(--odoo-danger); background: #fbe8e4; }
+.icon-btn:hover { background: #3a3a3a; border-color: #3a3a3a; transform: translateY(-1px); }
+.icon-btn:active { transform: translateY(0) scale(.94); }
+.icon-btn.danger { background: #fff; border-color: var(--odoo-border); color: var(--odoo-danger); }
+.icon-btn.danger:hover { background: var(--odoo-danger); border-color: var(--odoo-danger); color: #fff; }
 .menu-toggle { display: none; }
 
 .content {
