@@ -8,7 +8,7 @@ export default function SkeletonRows({ columns, rowCount = 8 }) {
               <th
                 key={c.key}
                 style={{
-                  background: "var(--odoo-purple)",
+                  background: "var(--odoo-accent)",
                   color: "#fff",
                   padding: "12px 14px",
                   fontSize: 10.5,

@@ -20,7 +20,7 @@ export function ToastProvider({ children }) {
         style={{
           position: "fixed",
           top: 60,
-          right: 16,
+          insetInlineEnd: 16,
           zIndex: 1000,
           display: "flex",
           flexDirection: "column",
@@ -33,25 +33,37 @@ export function ToastProvider({ children }) {
             style={{
               minWidth: 240,
               maxWidth: 340,
-              background: t.type === "error" ? "#FDECEC" : t.type === "success" ? "#E9F7EC" : "#fff",
-              border: `1px solid ${t.type === "error" ? "var(--odoo-danger)" : t.type === "success" ? "var(--odoo-success)" : "var(--odoo-border)"}`,
-              borderRadius: 10,
-              padding: "12px 16px",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+              background: t.type === "error" ? "#FDECEC" : t.type === "success" ? "#E9F7EC" : "var(--odoo-accent)",
+              border: `1px solid ${t.type === "error" ? "var(--odoo-danger)" : t.type === "success" ? "var(--odoo-success)" : "var(--odoo-accent)"}`,
+              borderRadius: 999,
+              padding: "10px 18px",
               fontSize: 12.5,
-              fontWeight: 500,
-              color: t.type === "error" ? "#7A1E1E" : t.type === "success" ? "#065F46" : "var(--odoo-text)",
-              boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
-              animation: "toastIn 0.25s ease both",
+              fontWeight: 600,
+              color: t.type === "error" ? "#7A1E1E" : t.type === "success" ? "#065F46" : "#fff",
+              boxShadow: "0 8px 24px rgba(0,0,0,0.16)",
+              animation: "toastIn 0.4s var(--odoo-ease-bounce) both",
             }}
           >
+            <span
+              style={{
+                width: 8,
+                height: 8,
+                borderRadius: "50%",
+                flexShrink: 0,
+                background: t.type === "error" ? "var(--odoo-danger)" : t.type === "success" ? "var(--odoo-success)" : "#fff",
+              }}
+            />
             {t.message}
           </div>
         ))}
       </div>
       <style>{`
         @keyframes toastIn {
-          from { opacity: 0; transform: translateX(20px); }
-          to { opacity: 1; transform: translateX(0); }
+          from { opacity: 0; transform: scale(.9) translateY(-6px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
         }
       `}</style>
     </ToastContext.Provider>

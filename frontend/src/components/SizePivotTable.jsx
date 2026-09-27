@@ -70,7 +70,7 @@ export default function SizePivotTable({ pivot, threshold = 0 }) {
               <th
                 key={h}
                 style={{
-                  position: "sticky", top: 0, background: "#E0F4F5", color: "var(--odoo-purple)",
+                  position: "sticky", top: 0, background: "var(--odoo-accent)", color: "#fff",
                   fontSize: 9, letterSpacing: 2, textTransform: "uppercase", fontWeight: 700,
                   padding: "10px 12px", textAlign: "center", whiteSpace: "nowrap",
                 }}
@@ -84,7 +84,7 @@ export default function SizePivotTable({ pivot, threshold = 0 }) {
           {rows.map((r, i) => (
             <tr key={i} style={{ borderBottom: "1px solid #F3F4F6" }}>
               <td style={cellStyle()}>{r.system_name}</td>
-              <td style={{ ...cellStyle(), fontFamily: "monospace", fontWeight: 700, color: "var(--odoo-purple)" }}>
+              <td style={{ ...cellStyle(), fontFamily: "monospace", fontWeight: 700, color: "var(--odoo-heading)" }}>
                 {r.base}
               </td>
               <td style={{ ...cellStyle(), color: "var(--brand-gold)", fontFamily: "monospace", fontSize: 11 }}>

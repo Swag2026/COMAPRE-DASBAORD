@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import TopBar from "./components/TopBar";
 import Sidebar from "./components/Sidebar";
 import LoginPage from "./pages/LoginPage";
+import LandingPage from "./pages/LandingPage";
 import SecretSettingsPage from "./pages/SecretSettingsPage";
 import ProductComparisonPage from "./pages/ProductComparisonPage";
 import ReorderPage from "./pages/ReorderPage";
@@ -33,7 +34,7 @@ function AppRoutes() {
         path="/login"
         element={isAuthenticated ? <Navigate to="/product-comparison" replace /> : <LoginPage />}
       />
-      <Route path="/" element={<Navigate to="/product-comparison" replace />} />
+      <Route path="/" element={<LandingPage />} />
       {/* Hidden admin page — its own password, not linked anywhere in the
           UI/nav. Deliberately outside ProtectedRoute/DashboardLayout so
           it keeps working even if the normal staff login is broken. */}

@@ -13,12 +13,12 @@ export default function ChipMultiSelect({ options, selected, onChange, placehold
           flexWrap: "wrap",
           gap: 6,
           border: "1px solid var(--odoo-border-strong)",
-          borderRadius: 9,
+          borderRadius: 14,
           padding: 6,
           minHeight: 38,
           cursor: "pointer",
           background: "#fff",
-          transition: "border-color .18s ease",
+          transition: "border-color .25s ease",
         }}
         onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--odoo-accent)")}
         onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--odoo-border-strong)")}
@@ -36,6 +36,7 @@ export default function ChipMultiSelect({ options, selected, onChange, placehold
               padding: "3px 10px",
               fontSize: 12,
               fontWeight: 600,
+              transition: "transform .25s var(--odoo-ease-bounce)",
             }}
           >
             {s}
@@ -74,7 +75,7 @@ export default function ChipMultiSelect({ options, selected, onChange, placehold
             right: 0,
             background: "#fff",
             border: "1px solid var(--odoo-border)",
-            borderRadius: 11,
+            borderRadius: 14,
             marginTop: 6,
             maxHeight: 160,
             overflowY: "auto",
@@ -88,7 +89,7 @@ export default function ChipMultiSelect({ options, selected, onChange, placehold
               onClick={() => {
                 onChange([...selected, o]);
               }}
-              style={{ padding: "8px 10px", fontSize: 12.5, cursor: "pointer", borderRadius: 7 }}
+              style={{ padding: "8px 10px", fontSize: 12.5, cursor: "pointer", borderRadius: 10 }}
               onMouseEnter={(e) => (e.currentTarget.style.background = "var(--odoo-bg)")}
               onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
             >

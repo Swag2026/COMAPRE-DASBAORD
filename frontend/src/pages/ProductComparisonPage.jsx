@@ -186,7 +186,7 @@ export default function ProductComparisonPage() {
               <Spinner size={15} color="#fff" /> {t("comparing")}
             </span>
           ) : (
-            <>{t("compareBtn")} <span className="rtl-flip">→</span></>
+            <>{t("compareBtn")} <span className="btn-arrow-badge rtl-flip">→</span></>
           )}
         </button>
         <div style={{ display: "flex", gap: 14, fontSize: 12 }}>

@@ -44,7 +44,7 @@ export default function WhatsAppShare({ rows, title = "Stock Report" }) {
           border: "none",
           fontSize: 12.5,
           fontWeight: 700,
-          color: "var(--odoo-purple)",
+          color: "var(--odoo-accent)",
           padding: 0,
         }}
       >
@@ -62,7 +62,7 @@ export default function WhatsAppShare({ rows, title = "Stock Report" }) {
               fontSize: 12,
               fontFamily: "monospace",
               border: "1px solid var(--odoo-border-strong)",
-              borderRadius: 6,
+              borderRadius: 12,
               padding: 8,
               resize: "vertical",
             }}
@@ -80,9 +80,12 @@ export default function WhatsAppShare({ rows, title = "Stock Report" }) {
                 fontWeight: 600,
                 fontSize: 12.5,
                 padding: "9px 0",
-                borderRadius: 100,
+                borderRadius: 999,
                 textDecoration: "none",
+                transition: "transform .25s var(--odoo-ease-bounce)",
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "none")}
             >
               واتساب →
             </a>
@@ -92,10 +95,13 @@ export default function WhatsAppShare({ rows, title = "Stock Report" }) {
                 flex: 1,
                 background: "#fff",
                 border: "1px solid var(--odoo-border-strong)",
-                borderRadius: 100,
+                borderRadius: 999,
                 fontSize: 12.5,
                 fontWeight: 600,
+                transition: "transform .25s var(--odoo-ease-bounce), background .2s ease",
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "none")}
             >
               {t("downloadTxt")}
             </button>

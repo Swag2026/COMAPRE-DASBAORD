@@ -1,4 +1,4 @@
-export default function Spinner({ size = 20, color = "var(--odoo-purple)" }) {
+export default function Spinner({ size = 20, color = "var(--odoo-accent)" }) {
   return (
     <svg
       width={size}

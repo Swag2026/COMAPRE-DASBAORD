@@ -25,10 +25,10 @@ const columns = [
     render: (r) => (
       <span
         style={{
-          padding: "2px 8px",
-          borderRadius: 10,
+          padding: "2px 10px",
+          borderRadius: 999,
           fontSize: 11,
-          fontWeight: 600,
+          fontWeight: 700,
           background:
             r.priority === "Critical" ? "#FDECEC" : r.priority === "Low" ? "#FDF3E3" : "#E9F7EC",
           color:

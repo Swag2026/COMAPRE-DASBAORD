@@ -193,7 +193,7 @@ function SettingsForm({ onLocked }) {
       <div style={{ width: 720, maxWidth: "100%", margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
           <div>
-            <div style={{ fontSize: 20, fontWeight: 700 }}>Admin Settings</div>
+            <div style={{ fontFamily: "var(--odoo-display-font)", fontSize: 20, fontWeight: 800 }}>Admin Settings</div>
             <div style={{ fontSize: 12.5, color: "#6B7280" }}>
               Edit Odoo credentials for all systems. Saved changes apply immediately.
             </div>
@@ -326,54 +326,57 @@ const pageWrap = {
 const card = {
   background: "#fff",
   border: "1px solid var(--odoo-border, #E7E3E3)",
-  borderRadius: 12,
+  borderRadius: 16,
   padding: 20,
   marginBottom: 16,
 };
 
-const sectionTitle = { fontSize: 14.5, fontWeight: 700, marginBottom: 10 };
+const sectionTitle = { fontFamily: "var(--odoo-display-font)", fontSize: 14.5, fontWeight: 800, marginBottom: 10 };
 
 const fieldStyle = {
   width: "100%",
   height: 38,
   padding: "0 12px",
   border: "1px solid var(--odoo-border-strong, #C7C1C1)",
-  borderRadius: 8,
+  borderRadius: 10,
   fontSize: 13,
   background: "#fff",
   boxSizing: "border-box",
+  transition: "border-color .2s ease, box-shadow .2s ease",
 };
 
 const primaryBtn = {
   height: 40,
   padding: "0 20px",
-  background: "var(--odoo-purple, #714B67)",
+  background: "var(--odoo-accent, #0a0a0a)",
   color: "#fff",
   border: "none",
-  borderRadius: 8,
+  borderRadius: 999,
   fontWeight: 700,
   fontSize: 13.5,
   cursor: "pointer",
+  transition: "transform .25s var(--odoo-ease-bounce), background .18s ease",
 };
 
 const secondaryBtn = {
   height: 32,
   padding: "0 14px",
-  background: "#F0EEEE",
+  background: "#fff",
   color: "#2C2C2C",
   border: "1px solid var(--odoo-border-strong, #C7C1C1)",
-  borderRadius: 8,
+  borderRadius: 999,
   fontWeight: 600,
   fontSize: 12.5,
   cursor: "pointer",
+  transition: "transform .25s var(--odoo-ease-bounce), background .18s ease",
 };
 
 const errorBox = {
   background: "#FDECEC",
   color: "#A93226",
   fontSize: 12.5,
-  padding: "8px 10px",
-  borderRadius: 6,
+  padding: "8px 14px",
+  borderRadius: 999,
   marginTop: 10,
   marginBottom: 10,
 };
@@ -382,8 +385,8 @@ const successBox = {
   background: "#E7F2E8",
   color: "#3D7A4E",
   fontSize: 12.5,
-  padding: "8px 10px",
-  borderRadius: 6,
+  padding: "8px 14px",
+  borderRadius: 999,
   marginTop: 10,
   marginBottom: 10,
 };

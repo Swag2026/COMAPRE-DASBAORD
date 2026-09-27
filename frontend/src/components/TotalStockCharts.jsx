@@ -73,14 +73,14 @@ function RichTooltip({ active, payload, unit, extraKey, extraLabel, systemKey })
       style={{
         background: "#fff",
         border: "1px solid var(--odoo-border)",
-        borderRadius: 10,
+        borderRadius: 14,
         padding: "10px 14px",
         boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
         fontSize: 12,
         animation: "tooltipPop 0.15s ease",
       }}
     >
-      <div style={{ fontWeight: 700, marginBottom: 4, color: "var(--odoo-purple)" }}>
+      <div style={{ fontFamily: "var(--odoo-display-font)", fontWeight: 800, marginBottom: 4, color: "var(--odoo-heading)" }}>
         {d.system_name || d.label}
       </div>
       {systemKey && d[systemKey] && (

@@ -6,6 +6,7 @@
 export default function ChartCard({ title, subtitle, children }) {
   return (
     <div
+      className="chart-card"
       style={{
         background: "var(--odoo-surface)",
         border: "1px solid var(--odoo-border)",
@@ -15,7 +16,7 @@ export default function ChartCard({ title, subtitle, children }) {
       }}
     >
       {title && (
-        <div style={{ margin: "0 0 4px", fontSize: 14, fontWeight: 800, color: "var(--odoo-heading)" }}>
+        <div style={{ margin: "0 0 4px", fontFamily: "var(--odoo-display-font)", fontSize: 14, fontWeight: 800, color: "var(--odoo-heading)" }}>
           {title}
         </div>
       )}

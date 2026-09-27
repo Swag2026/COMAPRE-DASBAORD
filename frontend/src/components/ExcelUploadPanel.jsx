@@ -99,7 +99,7 @@ export default function ExcelUploadPanel({ onSearch }) {
 
               <button
                 onClick={() => setExpanded((x) => !x)}
-                style={{ background: "none", border: "none", color: "var(--odoo-purple)", fontSize: 12, fontWeight: 600, padding: 0, marginBottom: 8 }}
+                style={{ background: "none", border: "none", color: "var(--odoo-accent)", fontSize: 12, fontWeight: 600, padding: 0, marginBottom: 8 }}
               >
                 {expanded ? "▾" : "▸"} {t("previewCodes")} ({extracted.unique_count})
               </button>

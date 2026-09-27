@@ -82,14 +82,14 @@ function BranchTooltip({ active, payload, label }) {
       style={{
         background: "#fff",
         border: "1px solid var(--odoo-border)",
-        borderRadius: 10,
+        borderRadius: 14,
         padding: "10px 14px",
         boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
         fontSize: 12,
         animation: "branchTooltipPop 0.15s ease",
       }}
     >
-      <div style={{ fontWeight: 700, marginBottom: 6, color: "var(--odoo-purple)" }}>{label}</div>
+      <div style={{ fontFamily: "var(--odoo-display-font)", fontWeight: 800, marginBottom: 6, color: "var(--odoo-heading)" }}>{label}</div>
       {payload.filter((p) => p.value > 0).map((p) => (
         <div key={p.dataKey} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
           <span style={{ width: 8, height: 8, borderRadius: "50%", background: p.fill }} />

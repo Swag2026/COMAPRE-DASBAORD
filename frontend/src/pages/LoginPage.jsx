@@ -45,7 +45,7 @@ export default function LoginPage() {
       }}
     >
       {/* Radial glow blobs */}
-      <div style={glowStyle(-150, -150, undefined, undefined, "rgba(74,172,180,0.12)")} />
+      <div style={glowStyle(-150, -150, undefined, undefined, "rgba(10,10,10,.10)")} />
       <div style={glowStyle(undefined, undefined, -100, -100, "rgba(212,168,75,0.07)", 400)} />
       {/* Grid lines */}
       <div
@@ -53,33 +53,33 @@ export default function LoginPage() {
           position: "absolute",
           inset: 0,
           backgroundImage:
-            "linear-gradient(rgba(74,172,180,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(74,172,180,0.05) 1px, transparent 1px)",
+            "linear-gradient(rgba(10,10,10,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(10,10,10,.05) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
 
       {/* Floating particles */}
       <Particle top="8%" left="6%" anim="float1 7s ease-in-out infinite">
-        <DiamondIcon size={48} stroke="#4AACB4" />
+        <DiamondIcon size={48} stroke="var(--odoo-accent)" />
       </Particle>
       <Particle top="15%" right="8%" anim="float2 9s ease-in-out infinite">
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-          <rect x="4" y="4" width="24" height="24" stroke="#D4A84B" strokeWidth="0.8" fill="none" opacity="0.6" />
+          <rect x="4" y="4" width="24" height="24" stroke="#8a8a8a" strokeWidth="0.8" fill="none" opacity="0.6" />
         </svg>
       </Particle>
       <Particle top="60%" left="4%" anim="float3 8s ease-in-out infinite">
-        <DiamondIcon size={24} stroke="#4AACB4" fill="rgba(74,172,180,0.08)" />
+        <DiamondIcon size={24} stroke="var(--odoo-accent)" fill="rgba(10,10,10,.06)" />
       </Particle>
       <Particle bottom="20%" right="5%" anim="float4 10s ease-in-out infinite">
         <DiamondDots size={40} />
       </Particle>
       <Particle top="40%" right="3%" anim="float5 6s ease-in-out infinite">
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <rect x="2" y="2" width="16" height="16" stroke="#D4A84B" strokeWidth="0.8" fill="none" opacity="0.5" transform="rotate(45 10 10)" />
+          <rect x="2" y="2" width="16" height="16" stroke="#8a8a8a" strokeWidth="0.8" fill="none" opacity="0.5" transform="rotate(45 10 10)" />
         </svg>
       </Particle>
       <Particle bottom="35%" left="8%" anim="float2 11s ease-in-out infinite">
-        <DiamondIcon size={28} stroke="#4AACB4" opacity={0.5} />
+        <DiamondIcon size={28} stroke="var(--odoo-accent)" opacity={0.5} />
       </Particle>
 
       {/* Content */}
@@ -87,17 +87,17 @@ export default function LoginPage() {
         <LogoRing />
         <div
           style={{
+            fontFamily: "var(--odoo-display-font)",
             fontSize: 48,
-            fontWeight: 300,
-            color: "#111827",
-            letterSpacing: 8,
+            fontWeight: 800,
+            color: "#0a0a0a",
+            letterSpacing: 4,
             marginBottom: 6,
-            textShadow: "0 0 40px rgba(74,172,180,0.3)",
           }}
         >
           SWAG
         </div>
-        <div style={{ fontSize: 9, letterSpacing: 5, textTransform: "uppercase", color: "var(--odoo-purple)", marginBottom: 32 }}>
+        <div style={{ fontSize: 9, letterSpacing: 5, textTransform: "uppercase", color: "var(--odoo-accent)", marginBottom: 32 }}>
           Product Intelligence · 5 Systems
         </div>
 
@@ -107,8 +107,8 @@ export default function LoginPage() {
             width: 360,
             maxWidth: "90vw",
             background: "#F9FAFB",
-            border: "1.5px solid var(--odoo-purple)",
-            borderRadius: 16,
+            border: "1.5px solid var(--odoo-accent)",
+            borderRadius: 20,
             padding: 28,
             boxShadow: "0 24px 64px rgba(0,0,0,0.15)",
           }}
@@ -137,7 +137,7 @@ export default function LoginPage() {
           </div>
 
           {error && (
-            <div style={{ background: "#FDECEC", color: "var(--odoo-danger)", fontSize: 12.5, padding: "8px 10px", borderRadius: 6, marginBottom: 14 }}>
+            <div style={{ background: "#FDECEC", color: "var(--odoo-danger)", fontSize: 12.5, padding: "8px 14px", borderRadius: 999, marginBottom: 14 }}>
               {error}
             </div>
           )}
@@ -147,17 +147,21 @@ export default function LoginPage() {
             disabled={loading}
             style={{
               width: "100%",
-              height: 40,
-              background: "var(--odoo-purple)",
+              height: 44,
+              background: "var(--odoo-accent)",
               color: "#fff",
               border: "none",
-              borderRadius: 8,
+              borderRadius: 999,
               fontWeight: 700,
               fontSize: 13.5,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
               opacity: loading ? 0.7 : 1,
             }}
           >
-            {loading ? t("loginSigningIn") : <>{t("loginSignIn")} <span className="rtl-flip">→</span></>}
+            {loading ? t("loginSigningIn") : <>{t("loginSignIn")} <span className="btn-arrow-badge rtl-flip">→</span></>}
           </button>
         </form>
 
@@ -167,7 +171,8 @@ export default function LoginPage() {
           style={{
             display: "flex", alignItems: "center", gap: 6, margin: "16px auto 0",
             background: "transparent", border: "1px solid rgba(107,114,128,0.3)",
-            borderRadius: 20, padding: "5px 12px", fontSize: 11, color: "#6B7280",
+            borderRadius: 999, padding: "5px 12px", fontSize: 11, color: "#6B7280",
+            transition: "transform .25s var(--odoo-ease-bounce)",
           }}
         >
           <Languages size={12} /> {lang === "en" ? "العربية" : "English"}
@@ -185,8 +190,8 @@ export default function LoginPage() {
         @keyframes float4 { 0%,100% { transform: translateY(0) rotate(70deg); } 60% { transform: translateY(-20px) rotate(65deg); } }
         @keyframes float5 { 0%,100% { transform: translateY(0) rotate(30deg); } 40% { transform: translateY(-16px) rotate(35deg); } }
         @keyframes glowPulse {
-          0%,100% { box-shadow: 0 0 40px rgba(74,172,180,0.15), 0 0 80px rgba(74,172,180,0.06); }
-          50% { box-shadow: 0 0 60px rgba(74,172,180,0.3), 0 0 120px rgba(74,172,180,0.12); }
+          0%,100% { box-shadow: 0 0 40px rgba(10,10,10,.12), 0 0 80px rgba(10,10,10,.05); }
+          50% { box-shadow: 0 0 60px rgba(10,10,10,.18), 0 0 120px rgba(10,10,10,.10); }
         }
         @keyframes logoSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes dotPulse { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.7; } }
@@ -208,7 +213,7 @@ function LogoRing() {
       <div
         style={{
           position: "absolute", inset: 10, borderRadius: "50%",
-          border: "1px dashed rgba(74,172,180,0.25)",
+          border: "1px dashed rgba(10,10,10,.15)",
           animation: "logoSpin 20s linear infinite",
         }}
       />
@@ -216,7 +221,7 @@ function LogoRing() {
         <span
           key={pos}
           style={{
-            position: "absolute", width: 6, height: 6, borderRadius: "50%", background: "#D4A84B",
+            position: "absolute", width: 6, height: 6, borderRadius: "50%", background: "#8a8a8a",
             animation: `dotPulse 2s ease-in-out infinite`, animationDelay: `${i * 0.5}s`,
             ...(pos === "t" && { top: 3, left: "50%", transform: "translateX(-50%)" }),
             ...(pos === "r" && { right: 3, top: "50%", transform: "translateY(-50%)" }),
@@ -227,16 +232,16 @@ function LogoRing() {
       ))}
       <div style={{ position: "absolute", inset: 20, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-          <path d="M22 4 L38 22 L22 40 L6 22 Z" stroke="#4AACB4" strokeWidth="1.2" fill="none" />
-          <path d="M22 10 L32 22 L22 34 L12 22 Z" stroke="#4AACB4" strokeWidth="0.7" fill="none" opacity="0.5" />
-          <path d="M22 15 L28 22 L22 29 L16 22 Z" fill="#4AACB4" opacity="0.5" />
+          <path d="M22 4 L38 22 L22 40 L6 22 Z" stroke="var(--odoo-accent)" strokeWidth="1.2" fill="none" />
+          <path d="M22 10 L32 22 L22 34 L12 22 Z" stroke="var(--odoo-accent)" strokeWidth="0.7" fill="none" opacity="0.5" />
+          <path d="M22 15 L28 22 L22 29 L16 22 Z" fill="var(--odoo-accent)" opacity="0.5" />
         </svg>
       </div>
     </div>
   );
 }
 
-function DiamondIcon({ size = 40, stroke = "#4AACB4", fill = "none", opacity = 1 }) {
+function DiamondIcon({ size = 40, stroke = "var(--odoo-accent)", fill = "none", opacity = 1 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" style={{ opacity }}>
       <path d="M24 4 L44 24 L24 44 L4 24 Z" stroke={stroke} strokeWidth="0.8" fill={fill} />
@@ -248,11 +253,11 @@ function DiamondIcon({ size = 40, stroke = "#4AACB4", fill = "none", opacity = 1
 function DiamondDots({ size = 40 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-      <path d="M20 3 L37 20 L20 37 L3 20 Z" stroke="#4AACB4" strokeWidth="0.6" fill="none" />
-      <circle cx="20" cy="3" r="1.5" fill="#D4A84B" />
-      <circle cx="37" cy="20" r="1.5" fill="#D4A84B" />
-      <circle cx="20" cy="37" r="1.5" fill="#D4A84B" />
-      <circle cx="3" cy="20" r="1.5" fill="#D4A84B" />
+      <path d="M20 3 L37 20 L20 37 L3 20 Z" stroke="var(--odoo-accent)" strokeWidth="0.6" fill="none" />
+      <circle cx="20" cy="3" r="1.5" fill="#8a8a8a" />
+      <circle cx="37" cy="20" r="1.5" fill="#8a8a8a" />
+      <circle cx="20" cy="37" r="1.5" fill="#8a8a8a" />
+      <circle cx="3" cy="20" r="1.5" fill="#8a8a8a" />
     </svg>
   );
 }
@@ -279,10 +284,10 @@ function glowStyle(left, top, right, bottom, color, size = 600) {
 
 const fieldStyle = {
   width: "100%",
-  height: 38,
-  padding: "0 12px",
+  height: 40,
+  padding: "0 14px",
   border: "1px solid var(--odoo-border-strong)",
-  borderRadius: 8,
+  borderRadius: 12,
   fontSize: 13,
   background: "#fff",
 };

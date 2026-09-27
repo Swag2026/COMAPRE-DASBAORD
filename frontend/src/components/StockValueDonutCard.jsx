@@ -34,7 +34,7 @@ export default function StockValueDonutCard({ rows, title = "Stock Split by Syst
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      {title && <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 12 }}>{title}</div>}
+      {title && <div style={{ fontFamily: "var(--odoo-display-font)", fontSize: 12, fontWeight: 700, marginBottom: 12 }}>{title}</div>}
       <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <DonutChart
           data={data}
@@ -56,7 +56,7 @@ export default function StockValueDonutCard({ rows, title = "Stock Split by Syst
                 <div style={{ fontSize: 10.5, color: "var(--odoo-text-muted)", maxWidth: 110, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {displayLabel}
                 </div>
-                <div style={{ fontSize: 20, fontWeight: 700, color: "var(--odoo-text)" }}>
+                <div style={{ fontFamily: "var(--odoo-display-font)", fontSize: 20, fontWeight: 800, color: "var(--odoo-text)" }}>
                   {displayValue.toLocaleString()}
                 </div>
                 {active && (
@@ -82,9 +82,11 @@ export default function StockValueDonutCard({ rows, title = "Stock Split by Syst
               justifyContent: "space-between",
               alignItems: "center",
               padding: "6px 8px",
-              borderRadius: 6,
+              borderRadius: 10,
               cursor: "pointer",
-              background: hoveredLabel === d.label ? "var(--odoo-purple-pale)" : "transparent",
+              transition: "background .25s ease, transform .25s var(--odoo-ease-bounce)",
+              transform: hoveredLabel === d.label ? "translateX(-2px)" : "none",
+              background: hoveredLabel === d.label ? "var(--odoo-accent-pale)" : "transparent",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
