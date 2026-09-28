@@ -15,20 +15,19 @@ export default function FloatingHeader() {
   return (
     <>
       <header className="lp-header">
-        <Link className="lp-logo-badge" to="/" aria-label="SWAG home">S</Link>
+        <Link className="lp-header-brand" to="/">
+          <span className="lp-logo-badge">S</span>
+          <span className="lp-header-brand-name">SWAG</span>
+        </Link>
 
         <nav className="lp-nav-shell" aria-label="Primary">
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href}>
-              <span className="lp-slide-label">
-                <span data-label={l.label}>{l.label}</span>
-              </span>
-            </a>
+            <a key={l.href} href={l.href}>{l.label}</a>
           ))}
         </nav>
 
         <div className="lp-header-actions">
-          <PillButton to="/login">Sign in</PillButton>
+          <PillButton to="/login" showArrow={false}>Sign in</PillButton>
           <button
             className="lp-menu-btn"
             aria-label={open ? "Close menu" : "Open menu"}

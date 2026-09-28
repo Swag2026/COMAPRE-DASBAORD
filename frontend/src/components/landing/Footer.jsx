@@ -11,7 +11,8 @@ export default function Footer() {
             <div>
               <div style={{ fontFamily: "var(--lp-display)", fontWeight: 800, fontSize: 15 }}>SWAG</div>
               <p className="lp-footer-tag">
-                One live view of stock, transfers and reorders across every group brand.
+                One live view of stock, transfers and reorders across every
+                group brand.
               </p>
             </div>
           </div>

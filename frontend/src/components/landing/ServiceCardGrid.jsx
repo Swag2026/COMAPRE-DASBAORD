@@ -11,21 +11,19 @@ const SERVICES = [
 
 export default function ServiceCardGrid() {
   return (
-    <section className="lp-section lp-services" id="services">
-      <div className="lp-container">
-        <div className="lp-services-head">
-          <div className="lp-eyebrow" style={{ justifyContent: "center" }}>What it does</div>
+    <section className="lp-services" id="services">
+      <div className="lp-container lp-section">
+        <div className="lp-services-head lp-reveal">
+          <span className="lp-eyebrow">What it does</span>
           <h2 className="lp-heading">Every module, one dashboard.</h2>
           <p>Six tools, one login, five connected brands.</p>
         </div>
         <div className="lp-service-grid">
           {SERVICES.map((s) => (
             <div className="lp-service-card lp-reveal" key={s.title}>
-              <span className="lp-service-icon"><s.Icon size={22} strokeWidth={1.6} /></span>
-              <div>
-                <h4 className="lp-service-title">{s.title}</h4>
-                <p className="lp-service-desc">{s.body}</p>
-              </div>
+              <span className="lp-service-icon"><s.Icon size={20} strokeWidth={1.7} /></span>
+              <h4 className="lp-service-title">{s.title}</h4>
+              <p className="lp-service-desc">{s.body}</p>
             </div>
           ))}
         </div>

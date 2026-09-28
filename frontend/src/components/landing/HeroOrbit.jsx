@@ -1,47 +1,61 @@
-import { Package, BarChart3, Building2, Truck, Tag, ChevronDown } from "lucide-react";
+import { Package, BarChart3 } from "lucide-react";
+import PillButton from "./PillButton";
 
-// Five circular accents placed around the wordmark. There's no client
-// photography to crop into circles (this is an internal tool, not a
-// portfolio), so each circle carries one product icon instead — same
-// staggered float/rotate choreography the brief calls for, honest content.
-const ACCENTS = [
-  { Icon: Package, top: "10%", left: "14%", size: 96, rot: -8, delay: "0s" },
-  { Icon: BarChart3, top: "18%", left: "78%", size: 118, rot: 6, delay: "1.1s" },
-  { Icon: Building2, top: "62%", left: "8%", size: 84, rot: 10, delay: "2.2s" },
-  { Icon: Truck, top: "70%", left: "84%", size: 100, rot: -6, delay: "0.6s" },
-  { Icon: Tag, top: "40%", left: "92%", size: 70, rot: 4, delay: "1.8s" },
+const STATS = [
+  { num: "5", label: "Connected brands" },
+  { num: "20+", label: "Branches tracked" },
+  { num: "1", label: "Live dashboard" },
 ];
 
 export default function HeroOrbit() {
   return (
     <section className="lp-hero">
-      {ACCENTS.map((a, i) => (
-        <div
-          key={i}
-          className="lp-hero-orbit-img"
-          style={{
-            top: a.top,
-            left: a.left,
-            width: a.size,
-            height: a.size,
-            animationDelay: a.delay,
-            "--r": `${a.rot}deg`,
-          }}
-        >
-          <a.Icon size={a.size * 0.32} strokeWidth={1.4} />
+      <div className="lp-hero-inner">
+        <div>
+          <span className="lp-eyebrow">Product Intelligence · 5 Systems</span>
+          <h1 className="lp-hero-title">
+            One live view of stock, <em>across every SWAG brand.</em>
+          </h1>
+          <p className="lp-hero-subtitle">
+            Product comparison, reorder alerts and branch transfers for
+            Different Clothes, LA ROUCHE, Fashion Limits and more — pulled
+            from five separate Odoo databases into a single dashboard.
+          </p>
+          <div className="lp-hero-cta-row">
+            <PillButton to="/login">Sign in to your dashboard</PillButton>
+            <PillButton href="#services" outline showArrow={false}>See what it does</PillButton>
+          </div>
+          <div className="lp-hero-stats">
+            {STATS.map((s) => (
+              <div key={s.label}>
+                <div className="lp-hero-stat-num">{s.num}</div>
+                <div className="lp-hero-stat-label">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
 
-      <div className="lp-hero-word">swag</div>
-
-      <div className="lp-hero-bottom-row">
-        <div className="lp-hero-proof">Since 2010 · 5 connected systems</div>
-        <div className="lp-hero-value-prop">
-          One live view of stock, transfers and reorders across every SWAG group brand.
-        </div>
-        <div className="lp-scroll-cue">
-          Scroll
-          <span className="lp-scroll-cue-dot"><ChevronDown size={15} /></span>
+        <div className="lp-hero-visual" aria-hidden="true">
+          <div className="lp-hero-card lp-hero-card-main">
+            <div className="bar w60" />
+            <div className="bar w80" />
+            <div className="bar w40" />
+            <div className="fill-bar" />
+          </div>
+          <div className="lp-hero-card lp-hero-mini-card c1">
+            <span className="lp-hero-mini-icon"><Package size={17} /></span>
+            <div className="lp-hero-mini-text">
+              <div className="num">1,248</div>
+              <div className="label">SKUs tracked</div>
+            </div>
+          </div>
+          <div className="lp-hero-card lp-hero-mini-card c2">
+            <span className="lp-hero-mini-icon"><BarChart3 size={17} /></span>
+            <div className="lp-hero-mini-text">
+              <div className="num">Live</div>
+              <div className="label">Reorder alerts</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

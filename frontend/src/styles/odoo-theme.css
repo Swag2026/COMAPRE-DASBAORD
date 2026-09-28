@@ -133,7 +133,7 @@ a:hover { text-decoration: underline; }
   --odoo-text: #2c2c2c;
   --odoo-text-muted: #6b6b6b;
   --odoo-text-faint: #9c9c9c;
-  --odoo-heading: #0a0a0a;
+  --odoo-heading: #3d2839;
   --odoo-purple: #714b67;
   --odoo-purple-dark: #4e3247;
   --odoo-purple-light: #a87f9d;
@@ -144,22 +144,19 @@ a:hover { text-decoration: underline; }
   --odoo-info: #008af5;
   --odoo-radius: 16px;
   --odoo-radius-sm: 12px;
-  --odoo-shadow: 0 1px 2px rgba(20, 20, 20, .05), 0 1px 1px rgba(20, 20, 20, .04);
-  --odoo-shadow-md: 0 2px 5px rgba(20, 20, 20, .05), 0 8px 18px rgba(20, 20, 20, .09);
-  --odoo-shadow-lg: 0 4px 10px rgba(20, 20, 20, .06), 0 14px 34px rgba(20, 20, 20, .15);
+  --odoo-shadow: 0 1px 2px rgba(45, 25, 40, .05), 0 1px 1px rgba(45, 25, 40, .04);
+  --odoo-shadow-md: 0 2px 5px rgba(45, 25, 40, .05), 0 8px 18px rgba(45, 25, 40, .09);
+  --odoo-shadow-lg: 0 4px 10px rgba(45, 25, 40, .06), 0 14px 34px rgba(45, 25, 40, .15);
   --odoo-ease-bounce: cubic-bezier(.16, 1, .3, 1);
   --odoo-display-font: "Plus Jakarta Sans", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
 
-  /* Monochrome accent — the reference app's actual default skin (data-theme
-     "dark", a black/white/grey alternate, not literally dark) uses solid
-     black wherever the purple/teal "accent" token would otherwise appear:
-     active nav pill, icon buttons, active dropdown/filter options, primary
-     buttons, focus rings, sortable-column highlight. Purple stays only on
-     decorative brand elements (hero header, logo) that have no reference
-     equivalent. */
-  --odoo-accent: #0a0a0a;
-  --odoo-accent-hover: #333;
-  --odoo-accent-pale: #ececec;
+  /* Odoo-purple accent — matches the landing page's corporate palette so the
+     whole product looks like one consistent system: active nav pill, icon
+     buttons, active dropdown/filter options, primary buttons, focus rings,
+     sortable-column highlight all use this token. */
+  --odoo-accent: #714b67;
+  --odoo-accent-hover: #5b3a53;
+  --odoo-accent-pale: #f1e6ee;
 }
 
 html {
@@ -409,7 +406,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .content > div { animation: fadeSlide .35s ease both; }
 
 .login-shell {
-  background: linear-gradient(160deg, #0a0a0a 0%, #262626 55%, #3a3a3a 100%) !important;
+  background: linear-gradient(160deg, #3f2839 0%, #714b67 55%, #8b5e7e 100%) !important;
 }
 .login-shell form {
   border: 1px solid rgba(255, 255, 255, .16) !important;
@@ -429,13 +426,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   margin-bottom: 20px;
   padding: 36px 34px 30px;
   border-radius: calc(var(--odoo-radius) + 6px);
-  background: linear-gradient(135deg, #262626 0%, #141414 55%, #0a0a0a 100%);
+  background: linear-gradient(135deg, #5b3a53 0%, #4e3247 55%, #3f2839 100%);
   background-image:
     linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px),
-    linear-gradient(135deg, #262626 0%, #141414 55%, #0a0a0a 100%);
+    linear-gradient(135deg, #5b3a53 0%, #4e3247 55%, #3f2839 100%);
   background-size: 34px 34px, 34px 34px, 100% 100%;
-  box-shadow: 0 10px 24px rgba(10, 10, 10, .22);
+  box-shadow: 0 10px 24px rgba(45, 25, 40, .22);
 }
 .hero-orb {
   position: absolute;
@@ -545,7 +542,7 @@ select, input[type="number"], input[type="text"], input[type="email"], input[typ
 }
 select:focus, input:focus, textarea:focus {
   border-color: var(--odoo-accent) !important;
-  box-shadow: 0 0 0 3px rgba(10, 10, 10, .12) !important;
+  box-shadow: 0 0 0 3px rgba(113, 75, 103, .15) !important;
   outline: none;
 }
 input[type="checkbox"], input[type="radio"] { accent-color: var(--odoo-accent); cursor: pointer; }
@@ -689,7 +686,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--odoo-accent); 
   padding: 20px 22px !important;
   background: var(--odoo-accent) !important;
   border-color: var(--odoo-accent) !important;
-  box-shadow: 0 10px 24px rgba(10, 10, 10, .2) !important;
+  box-shadow: 0 10px 24px rgba(45, 25, 40, .2) !important;
 }
 .kpi-card.featured .kpi-info .label { color: rgba(255, 255, 255, .62); }
 .kpi-card.featured .kpi-icon { width: 48px; height: 48px; }

@@ -1,11 +1,10 @@
-import { Shirt, Building2, Layers, ArrowUpRight } from "lucide-react";
+import { Shirt, Building2, Layers, ArrowRight } from "lucide-react";
 
-// Real connected brands stand in for "case studies" — each row shows what
+// Real connected brands stand in for "case studies" — each card shows what
 // the dashboard actually tracks for that company, not a fabricated project.
 const CASES = [
   {
     Icon: Shirt,
-    mark: "dc",
     name: "Different Clothes",
     year: "Connected since 2018",
     cat: "Retail · multi-branch",
@@ -13,7 +12,6 @@ const CASES = [
   },
   {
     Icon: Building2,
-    mark: "lr",
     name: "LA ROUCHE",
     year: "Connected since 2020",
     cat: "Retail · reorder tracking",
@@ -21,7 +19,6 @@ const CASES = [
   },
   {
     Icon: Layers,
-    mark: "fl",
     name: "Fashion Limits",
     year: "Connected since 2021",
     cat: "Retail · transfers",
@@ -33,24 +30,22 @@ export default function CaseStudyList() {
   return (
     <section className="lp-section">
       <div className="lp-container">
-        <div className="lp-cases lp-reveal">
-          <h2 className="lp-cases-heading">Connected brands</h2>
-          {CASES.map((c, i) => (
-            <div className={`lp-case-row${i % 2 ? " reverse" : ""}`} key={c.name}>
-              <div className="lp-case-image">
-                <span className="lp-case-image-mark">{c.mark}</span>
-                <c.Icon size={44} strokeWidth={1.3} color="#fff" style={{ position: "relative", zIndex: 1 }} />
-              </div>
-              <div className="lp-case-info">
-                <div className="lp-case-year">{c.year}</div>
-                <h3 className="lp-case-name">{c.name}</h3>
-                <div className="lp-case-cat">{c.cat}</div>
-                <p style={{ color: "rgba(255,255,255,.7)", fontSize: 14, maxWidth: 420 }}>{c.body}</p>
-                <span className="lp-case-view">
-                  View in dashboard
-                  <span className="lp-case-view-dot"><ArrowUpRight size={13} /></span>
-                </span>
-              </div>
+        <div className="lp-cases-head lp-reveal">
+          <span className="lp-eyebrow">Connected brands</span>
+          <h2 className="lp-heading">Every company, one dashboard.</h2>
+          <p>See exactly what each brand looks like inside the platform.</p>
+        </div>
+        <div className="lp-case-grid">
+          {CASES.map((c) => (
+            <div className="lp-case-card lp-reveal" key={c.name}>
+              <span className="lp-case-mark"><c.Icon size={22} strokeWidth={1.7} /></span>
+              <div className="lp-case-year">{c.year}</div>
+              <h3 className="lp-case-name">{c.name}</h3>
+              <div className="lp-case-cat">{c.cat}</div>
+              <p className="lp-case-body">{c.body}</p>
+              <a className="lp-case-view" href="/login">
+                View in dashboard <ArrowRight size={14} />
+              </a>
             </div>
           ))}
         </div>
